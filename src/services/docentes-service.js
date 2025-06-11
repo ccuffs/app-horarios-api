@@ -4,7 +4,7 @@ const docentesService = express.Router();
 
 docentesService.get("/", async (req, res) => {
 	try {
-		const profs = await model.Docente.findAll({ order: [['nome', 'ASC']] });
+		const profs = await model.Docente.findAll({ order: [["nome", "ASC"]] });
 		res.status(200).json({ docentes: profs });
 	} catch (error) {
 		console.log("Erro ao buscar docentes:", error);
@@ -27,7 +27,9 @@ docentesService.post("/", async (req, res) => {
 docentesService.put("/", async (req, res) => {
 	const formData = req.body.formData;
 	try {
-		await model.Docente.update(formData, { where: { id: formData.id } });
+		await model.Docente.update(formData, {
+			where: { codigo: formData.codigo },
+		});
 		res.sendStatus(200);
 	} catch (error) {
 		console.log("Erro ao atualizar docente:", error);
@@ -35,11 +37,11 @@ docentesService.put("/", async (req, res) => {
 	}
 });
 
-docentesService.delete("/:id", async (req, res) => {
+docentesService.delete("/:codigo", async (req, res) => {
 	try {
-		const id = req.params.id;
+		const codigo = req.params.codigo;
 		const deleted = await model.Docente.destroy({
-			where: { id: id },
+			where: { codigo: codigo },
 		});
 
 		if (deleted) {

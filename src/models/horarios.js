@@ -4,13 +4,53 @@ module.exports = (sequelize, DataTypes) => {
 	const Horario = sequelize.define(
 		"Horario",
 		{
-			id_curso: { type: DataTypes.INTEGER, primaryKey: true, allowNull: false },
-			id_ccr: { type: DataTypes.INTEGER, primaryKey: true, allowNull: false },
-			codigo_docente: { type: DataTypes.STRING, primaryKey: true, allowNull: false },
-			ano: { type: DataTypes.INTEGER, primaryKey: true, allowNull: false },
-			semestre: { type: DataTypes.INTEGER, primaryKey: true, allowNull: false },
-			fase: { type: DataTypes.INTEGER, primaryKey: true, allowNull: false },
-			dia_semana: { type: DataTypes.INTEGER, primaryKey: true, allowNull: false },
+			id_curso: {
+				type: DataTypes.INTEGER,
+				primaryKey: true,
+				allowNull: false,
+				references: {
+					model: "curso",
+					key: "id"
+				}
+			},
+			id_ccr: {
+				type: DataTypes.INTEGER,
+				primaryKey: true,
+				allowNull: false,
+				references: {
+					model: "ccr",
+					key: "id"
+				}
+			},
+			codigo_docente: {
+				type: DataTypes.STRING,
+				primaryKey: true,
+				allowNull: false,
+				references: {
+					model: "docente",
+					key: "codigo"
+				}
+			},
+			ano: {
+				type: DataTypes.INTEGER,
+				primaryKey: true,
+				allowNull: false
+			},
+			semestre: {
+				type: DataTypes.INTEGER,
+				primaryKey: true,
+				allowNull: false
+			},
+			fase: {
+				type: DataTypes.INTEGER,
+				primaryKey: true,
+				allowNull: false
+			},
+			dia_semana: {
+				type: DataTypes.INTEGER,
+				primaryKey: true,
+				allowNull: false
+			},
 			hora_inicio: DataTypes.TIME,
 			duracao: DataTypes.INTEGER,
 			comentario: DataTypes.STRING,
@@ -18,7 +58,7 @@ module.exports = (sequelize, DataTypes) => {
 		},
 		{
 			sequelize,
-			tableName: "horarios",
+			tableName: "horario",
 			schema: "public",
 			freezeTableName: true,
 			timestamps: false,
@@ -27,9 +67,24 @@ module.exports = (sequelize, DataTypes) => {
 
 	// Definir associações
 	Horario.associate = function(models) {
-		// Para chaves compostas, é melhor usar queries manuais
-		// ou criar um campo único para a associação
-		// Por enquanto, vamos remover a associação automática
+		// Associações com as tabelas relacionadas
+		Horario.belongsTo(models.Curso, {
+			foreignKey: 'id_curso',
+			as: 'curso'
+		});
+
+		Horario.belongsTo(models.CCR, {
+			foreignKey: 'id_ccr',
+			as: 'ccr'
+		});
+
+		Horario.belongsTo(models.Docente, {
+			foreignKey: 'codigo_docente',
+			as: 'docente'
+		});
+
+		// Associação composta com AnoSemestre (manual)
+		// Usaremos métodos customizados para isso
 	};
 
 		// Método para buscar horários com dados do ano/semestre

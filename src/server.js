@@ -13,6 +13,7 @@ const cursosService = require("./services/cursos-service");
 const ccrsService = require("./services/ccrs-service");
 const horariosService = require("./services/horarios-service");
 const anoSemestreService = require("./services/ano-semestre-service");
+const ofertasService = require("./services/ofertas-service");
 
 app.use(cors());
 app.use(express.json());
@@ -32,3 +33,4 @@ app.use("/api/cursos", cursosService);
 app.use("/api/docentes", docentesService);
 app.use("/api/horarios", horariosService);
 app.use("/api/ano-semestre", anoSemestreService);
+app.use("/api/ofertas", ofertasService);

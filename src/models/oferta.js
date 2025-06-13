@@ -26,7 +26,8 @@ module.exports = (sequelize, DataTypes) => {
             },
             turno: {
                 type: DataTypes.STRING,
-                allowNull: true,
+                primaryKey: true,
+                allowNull: false,
             },
         },
         {
@@ -45,8 +46,7 @@ module.exports = (sequelize, DataTypes) => {
             as: 'curso'
         });
 
-        // Associação composta com AnoSemestre (manual)
-        // Usaremos métodos customizados para carregar dados do ano_semestre
+
     };
 
     return Oferta;

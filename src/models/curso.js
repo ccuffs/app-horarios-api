@@ -39,6 +39,14 @@ module.exports = (sequelize, DataTypes) => {
 			as: 'ccrs'
 		});
 
+		// Associação many-to-many com Usuario através da tabela usuario_curso
+		Curso.belongsToMany(models.Usuario, {
+			through: models.UsuarioCurso,
+			foreignKey: 'id_curso',
+			otherKey: 'id_usuario',
+			as: 'usuarios'
+		});
+
 		// Associações com outras tabelas
 		Curso.hasMany(models.Horario, {
 			foreignKey: 'id_curso',

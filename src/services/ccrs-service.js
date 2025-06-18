@@ -4,7 +4,14 @@ const ccrsService = express.Router();
 
 ccrsService.get("/", async (req, res) => {
 	try {
-		const ccrs = await model.CCR.findAll({ order: [['nome', 'ASC']] });
+		const ccrs = await model.CCR.findAll({
+			include: [{
+				model: model.Curso,
+				as: 'cursos',
+				through: { attributes: [] } // Excluir atributos da tabela de junção
+			}],
+			order: [['nome', 'ASC']]
+		});
 		res.status(200).json({ ccrs: ccrs });
 	} catch (error) {
 		console.log("Erro ao buscar CCRs:", error);
@@ -13,11 +20,18 @@ ccrsService.get("/", async (req, res) => {
 });
 
 ccrsService.post("/", async (req, res) => {
-	const formData = req.body.formData;
-	console.log(formData);
+	const { formData, cursosSelecionados } = req.body;
+	console.log(formData, cursosSelecionados);
+
 	try {
-		const ccrs = model.CCR.build(formData);
-		await ccrs.save();
+		// Criar o CCR
+		const ccr = await model.CCR.create(formData);
+
+		// Associar com os cursos selecionados
+		if (cursosSelecionados && cursosSelecionados.length > 0) {
+			await ccr.setCursos(cursosSelecionados);
+		}
+
 		res.sendStatus(200);
 	} catch (error) {
 		console.log("Erro ao criar CCR:", error);
@@ -26,9 +40,19 @@ ccrsService.post("/", async (req, res) => {
 });
 
 ccrsService.put("/", async (req, res) => {
-	const formData = req.body.formData;
+	const { formData, cursosSelecionados } = req.body;
 	try {
-		await model.CCR.update(formData, {where: {codigo: formData.codigo} });
+		// Atualizar o CCR
+		await model.CCR.update(formData, {where: {id: formData.id} });
+
+		// Buscar o CCR atualizado
+		const ccr = await model.CCR.findByPk(formData.id);
+
+		// Atualizar as associações com cursos
+		if (cursosSelecionados) {
+			await ccr.setCursos(cursosSelecionados);
+		}
+
 		res.sendStatus(200);
 	} catch (error) {
 		console.log("Erro ao atualizar CCR:", error);
@@ -36,11 +60,11 @@ ccrsService.put("/", async (req, res) => {
 	}
 });
 
-ccrsService.delete("/:codigo", async (req, res) => {
+ccrsService.delete("/:id", async (req, res) => {
 	try {
-		const codigo = req.params.codigo;
+		const id = req.params.id;
 		const deleted = await model.CCR.destroy({
-			where: { codigo: codigo },
+			where: { id: id },
 		});
 
 		if (deleted) {

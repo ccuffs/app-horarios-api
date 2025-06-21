@@ -53,26 +53,44 @@ ofertasService.post("/", async (req, res) => {
         // Validar dados obrigatórios
         if (!ano || !semestre || !id_curso || !fase) {
             return res.status(400).json({
-                message: "Parâmetros obrigatórios: ano, semestre, id_curso, fase"
+                message: "Parâmetros obrigatórios: ano, semestre, id_curso, fase, período e turno"
+            });
+        }
+
+        // Validar tipos de dados
+        const anoInt = parseInt(ano);
+        const semestreInt = parseInt(semestre);
+        const idCursoInt = parseInt(id_curso);
+        const faseInt = parseInt(fase);
+
+        if (isNaN(anoInt) || isNaN(semestreInt) || isNaN(idCursoInt) || isNaN(faseInt)) {
+            return res.status(400).json({
+                message: "Os campos ano, semestre, id_curso e fase devem ser números válidos"
             });
         }
 
         // Verificar se já existe
         const existente = await model.Oferta.findOne({
-            where: { ano, semestre, id_curso, fase }
+            where: {
+                ano: anoInt,
+                semestre: semestreInt,
+                id_curso: idCursoInt,
+                fase: faseInt,
+                turno: turno
+            }
         });
 
         if (existente) {
             return res.status(409).json({
-                message: `Oferta para ano=${ano}, semestre=${semestre}, curso=${id_curso}, fase=${fase} já existe`
+                message: `Oferta para ano=${anoInt}, semestre=${semestreInt}, curso=${idCursoInt}, fase=${faseInt}, turno=${turno} já existe`
             });
         }
 
         const novaOferta = await model.Oferta.create({
-            ano: parseInt(ano),
-            semestre: parseInt(semestre),
-            id_curso: parseInt(id_curso),
-            fase: parseInt(fase),
+            ano: anoInt,
+            semestre: semestreInt,
+            id_curso: idCursoInt,
+            fase: faseInt,
             turno: turno
         });
 
@@ -82,6 +100,16 @@ ofertasService.post("/", async (req, res) => {
         });
     } catch (error) {
         console.error("Erro ao criar oferta:", error);
+
+        // Verificar se é erro de constraint/validação do banco
+        if (error.name === 'SequelizeValidationError' || error.name === 'SequelizeUniqueConstraintError') {
+            return res.status(400).json({
+                message: "Erro de validação dos dados",
+                error: error.message,
+                details: error.errors?.map(e => e.message) || []
+            });
+        }
+
         res.status(500).json({
             message: "Erro interno do servidor ao criar oferta",
             error: error.message

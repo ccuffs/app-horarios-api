@@ -25,12 +25,32 @@ anoSemestreService.get("/", async (req, res) => {
 // POST - Criar novo ano/semestre
 anoSemestreService.post("/", async (req, res) => {
 	try {
-		const { ano, semestre } = req.body;
+		const { ano, semestre, inicio, fim } = req.body;
 
 		// Validar dados obrigatórios
 		if (!ano || !semestre) {
 			return res.status(400).json({
 				message: "Parâmetros obrigatórios: ano e semestre"
+			});
+		}
+
+		// Validar se as datas são válidas (se fornecidas)
+		if (inicio && isNaN(Date.parse(inicio))) {
+			return res.status(400).json({
+				message: "Data de início inválida"
+			});
+		}
+
+		if (fim && isNaN(Date.parse(fim))) {
+			return res.status(400).json({
+				message: "Data de fim inválida"
+			});
+		}
+
+		// Validar se data de fim é posterior à data de início
+		if (inicio && fim && new Date(inicio) >= new Date(fim)) {
+			return res.status(400).json({
+				message: "A data de fim deve ser posterior à data de início"
 			});
 		}
 
@@ -45,10 +65,17 @@ anoSemestreService.post("/", async (req, res) => {
 			});
 		}
 
-		const novoAnoSemestre = await model.AnoSemestre.create({
+		// Preparar dados para criação
+		const dadosAnoSemestre = {
 			ano: parseInt(ano),
 			semestre: parseInt(semestre)
-		});
+		};
+
+		// Adicionar datas se fornecidas
+		if (inicio) dadosAnoSemestre.inicio = new Date(inicio);
+		if (fim) dadosAnoSemestre.fim = new Date(fim);
+
+		const novoAnoSemestre = await model.AnoSemestre.create(dadosAnoSemestre);
 
 		res.status(201).json({
 			message: "Ano/semestre criado com sucesso",
@@ -58,6 +85,86 @@ anoSemestreService.post("/", async (req, res) => {
 		console.error("Erro ao criar ano/semestre:", error);
 		res.status(500).json({
 			message: "Erro interno do servidor ao criar ano/semestre",
+			error: error.message
+		});
+	}
+});
+
+// PUT - Atualizar ano/semestre existente
+anoSemestreService.put("/:ano/:semestre", async (req, res) => {
+	try {
+		const { ano: anoParam, semestre: semestreParam } = req.params;
+		const { inicio, fim } = req.body;
+
+		// Validar se as datas são válidas (se fornecidas)
+		if (inicio && isNaN(Date.parse(inicio))) {
+			return res.status(400).json({
+				message: "Data de início inválida"
+			});
+		}
+
+		if (fim && isNaN(Date.parse(fim))) {
+			return res.status(400).json({
+				message: "Data de fim inválida"
+			});
+		}
+
+		// Validar se data de fim é posterior à data de início
+		if (inicio && fim && new Date(inicio) >= new Date(fim)) {
+			return res.status(400).json({
+				message: "A data de fim deve ser posterior à data de início"
+			});
+		}
+
+		// Verificar se existe
+		const anoSemestre = await model.AnoSemestre.findOne({
+			where: {
+				ano: parseInt(anoParam),
+				semestre: parseInt(semestreParam)
+			}
+		});
+
+		if (!anoSemestre) {
+			return res.status(404).json({
+				message: `Ano/semestre ${anoParam}/${semestreParam} não encontrado`
+			});
+		}
+
+		// Preparar dados para atualização
+		const dadosAtualizacao = {};
+		if (inicio) dadosAtualizacao.inicio = new Date(inicio);
+		if (fim) dadosAtualizacao.fim = new Date(fim);
+
+		// Se não há dados para atualizar
+		if (Object.keys(dadosAtualizacao).length === 0) {
+			return res.status(400).json({
+				message: "Nenhum campo fornecido para atualização"
+			});
+		}
+
+		await model.AnoSemestre.update(dadosAtualizacao, {
+			where: {
+				ano: parseInt(anoParam),
+				semestre: parseInt(semestreParam)
+			}
+		});
+
+		// Buscar o registro atualizado
+		const anoSemestreAtualizado = await model.AnoSemestre.findOne({
+			where: {
+				ano: parseInt(anoParam),
+				semestre: parseInt(semestreParam)
+			}
+		});
+
+		res.status(200).json({
+			message: "Ano/semestre atualizado com sucesso",
+			anoSemestre: anoSemestreAtualizado
+		});
+	} catch (error) {
+		console.error("Erro ao atualizar ano/semestre:", error);
+		res.status(500).json({
+			message: "Erro interno do servidor ao atualizar ano/semestre",
 			error: error.message
 		});
 	}

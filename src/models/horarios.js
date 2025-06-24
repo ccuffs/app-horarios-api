@@ -10,8 +10,8 @@ module.exports = (sequelize, DataTypes) => {
 				allowNull: false,
 				references: {
 					model: "curso",
-					key: "id"
-				}
+					key: "id",
+				},
 			},
 			id_ccr: {
 				type: DataTypes.INTEGER,
@@ -19,8 +19,8 @@ module.exports = (sequelize, DataTypes) => {
 				allowNull: false,
 				references: {
 					model: "ccr",
-					key: "id"
-				}
+					key: "id",
+				},
 			},
 			codigo_docente: {
 				type: DataTypes.STRING,
@@ -28,33 +28,41 @@ module.exports = (sequelize, DataTypes) => {
 				allowNull: false,
 				references: {
 					model: "docente",
-					key: "codigo"
-				}
-			},
-			ano: {
-				type: DataTypes.INTEGER,
-				primaryKey: true,
-				allowNull: false
-			},
-			semestre: {
-				type: DataTypes.INTEGER,
-				primaryKey: true,
-				allowNull: false
-			},
-			fase: {
-				type: DataTypes.INTEGER,
-				primaryKey: true,
-				allowNull: false
+					key: "codigo",
+				},
 			},
 			dia_semana: {
 				type: DataTypes.INTEGER,
 				primaryKey: true,
-				allowNull: false
+				allowNull: false,
+			},
+			ano: {
+				type: DataTypes.INTEGER,
+				primaryKey: true,
+				allowNull: false,
+			},
+			semestre: {
+				type: DataTypes.INTEGER,
+				primaryKey: true,
+				allowNull: false,
+			},
+			fase: {
+				type: DataTypes.INTEGER,
+				primaryKey: true,
+				allowNull: false,
 			},
 			hora_inicio: DataTypes.TIME,
 			duracao: DataTypes.INTEGER,
 			comentario: DataTypes.STRING,
-			id: { type: DataTypes.STRING, allowNull: false }
+			id: {
+				type: DataTypes.STRING,
+				allowNull: false
+			},
+			permitirConflito: {
+				type: DataTypes.BOOLEAN,
+				allowNull: false,
+				defaultValue: false,
+			},
 		},
 		{
 			sequelize,
@@ -66,57 +74,60 @@ module.exports = (sequelize, DataTypes) => {
 	);
 
 	// Definir associações
-	Horario.associate = function(models) {
+	Horario.associate = function (models) {
 		// Associações com as tabelas relacionadas
 		Horario.belongsTo(models.Curso, {
-			foreignKey: 'id_curso',
-			as: 'curso'
+			foreignKey: "id_curso",
+			as: "curso",
 		});
 
 		Horario.belongsTo(models.CCR, {
-			foreignKey: 'id_ccr',
-			as: 'ccr'
+			foreignKey: "id_ccr",
+			as: "ccr",
 		});
 
 		Horario.belongsTo(models.Docente, {
-			foreignKey: 'codigo_docente',
-			as: 'docente'
+			foreignKey: "codigo_docente",
+			as: "docente",
 		});
 
 		// Associação composta com AnoSemestre (manual)
 		// Usaremos métodos customizados para isso
 	};
 
-		// Método para buscar horários com dados do ano/semestre
-	Horario.findWithAnoSemestre = async function(whereClause = {}) {
+	// Método para buscar horários com dados do ano/semestre
+	Horario.findWithAnoSemestre = async function (whereClause = {}) {
 		const horarios = await this.findAll({
 			where: whereClause,
-			raw: true
+			raw: true,
 		});
 
 		if (horarios.length === 0) return [];
 
 		// Buscar dados únicos de ano/semestre
-		const anosSemestres = [...new Set(horarios.map(h => `${h.ano}-${h.semestre}`))];
-		const { AnoSemestre } = require('./index');
-		const { Op } = require('sequelize');
+		const anosSemestres = [
+			...new Set(horarios.map((h) => `${h.ano}-${h.semestre}`)),
+		];
+		const { AnoSemestre } = require("./index");
+		const { Op } = require("sequelize");
 
 		const anoSemestreData = await AnoSemestre.findAll({
 			where: {
-				[Op.or]: anosSemestres.map(as => {
-					const [ano, semestre] = as.split('-');
+				[Op.or]: anosSemestres.map((as) => {
+					const [ano, semestre] = as.split("-");
 					return { ano: parseInt(ano), semestre: parseInt(semestre) };
-				})
+				}),
 			},
-			raw: true
+			raw: true,
 		});
 
 		// Mapear dados do ano/semestre para cada horário
-		return horarios.map(horario => ({
+		return horarios.map((horario) => ({
 			...horario,
-			anoSemestre: anoSemestreData.find(as =>
-				as.ano === horario.ano && as.semestre === horario.semestre
-			)
+			anoSemestre: anoSemestreData.find(
+				(as) =>
+					as.ano === horario.ano && as.semestre === horario.semestre,
+			),
 		}));
 	};
 

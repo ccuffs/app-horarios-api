@@ -22,10 +22,12 @@ horariosService.get("/", async (req, res) => {
 				id_curso: parseInt(id_curso),
 			},
 			order: [
-				['dia_semana', 'ASC'],
-				['hora_inicio', 'ASC'],
+				['id_curso', 'ASC'],
 				['id_ccr', 'ASC'],
-				['codigo_docente', 'ASC']
+				['codigo_docente', 'ASC'],
+				['dia_semana', 'ASC'],
+				['fase', 'ASC'],
+				['hora_inicio', 'ASC']
 			],
 		});
 

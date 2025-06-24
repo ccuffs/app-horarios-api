@@ -58,7 +58,7 @@ module.exports = (sequelize, DataTypes) => {
 				type: DataTypes.STRING,
 				allowNull: false
 			},
-			permitirConflito: {
+			permitirconflito: {
 				type: DataTypes.BOOLEAN,
 				allowNull: false,
 				defaultValue: false,

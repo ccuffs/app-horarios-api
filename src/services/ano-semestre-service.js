@@ -200,4 +200,63 @@ anoSemestreService.delete("/:ano/:semestre", async (req, res) => {
 	}
 });
 
+// PATCH - Alterar status de publicação do ano/semestre
+anoSemestreService.patch("/:ano/:semestre/publicacao", async (req, res) => {
+	try {
+		const { ano, semestre } = req.params;
+		const { publicado } = req.body;
+
+		// Validar parâmetro
+		if (typeof publicado !== 'boolean') {
+			return res.status(400).json({
+				message: "O campo 'publicado' deve ser um valor booleano (true/false)"
+			});
+		}
+
+		// Verificar se existe
+		const anoSemestre = await model.AnoSemestre.findOne({
+			where: {
+				ano: parseInt(ano),
+				semestre: parseInt(semestre)
+			}
+		});
+
+		if (!anoSemestre) {
+			return res.status(404).json({
+				message: `Ano/semestre ${ano}/${semestre} não encontrado`
+			});
+		}
+
+		// Atualizar status de publicação
+		await model.AnoSemestre.update(
+			{ publicado },
+			{
+				where: {
+					ano: parseInt(ano),
+					semestre: parseInt(semestre)
+				}
+			}
+		);
+
+		// Buscar o registro atualizado
+		const anoSemestreAtualizado = await model.AnoSemestre.findOne({
+			where: {
+				ano: parseInt(ano),
+				semestre: parseInt(semestre)
+			}
+		});
+
+		res.status(200).json({
+			message: `Horários ${publicado ? 'publicados' : 'despublicados'} com sucesso`,
+			anoSemestre: anoSemestreAtualizado
+		});
+	} catch (error) {
+		console.error("Erro ao atualizar status de publicação:", error);
+		res.status(500).json({
+			message: "Erro interno do servidor ao atualizar status de publicação",
+			error: error.message
+		});
+	}
+});
+
 module.exports = anoSemestreService;

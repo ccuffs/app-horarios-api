@@ -5,13 +5,32 @@ const horariosService = express.Router();
 // GET - Buscar horários
 horariosService.get("/", async (req, res) => {
 	try {
-		const { ano, semestre, id_curso } = req.query;
+		const { ano, semestre, id_curso, apenas_publicados } = req.query;
 
 		// Validar parâmetros obrigatórios
 		if (!ano || !semestre || !id_curso) {
 			return res.status(400).json({
 				message: "Parâmetros obrigatórios: ano, semestre, id_curso",
 			});
+		}
+
+		// Se apenas_publicados=true, verificar primeiro se o ano/semestre está publicado
+		if (apenas_publicados === 'true') {
+			const anoSemestre = await model.AnoSemestre.findOne({
+				where: {
+					ano: parseInt(ano),
+					semestre: parseInt(semestre),
+					publicado: true
+				}
+			});
+
+			if (!anoSemestre) {
+				return res.status(404).json({
+					message: "Horários não publicados para este período",
+					horarios: [],
+					count: 0,
+				});
+			}
 		}
 
 		// Buscar horários no banco
@@ -31,7 +50,7 @@ horariosService.get("/", async (req, res) => {
 			],
 		});
 
-		console.log(`Encontrados ${horarios.length} horários para ano=${ano}, semestre=${semestre}, curso=${id_curso}`);
+		console.log(`Encontrados ${horarios.length} horários para ano=${ano}, semestre=${semestre}, curso=${id_curso}${apenas_publicados === 'true' ? ' (apenas publicados)' : ''}`);
 
 		res.status(200).json({
 			message: "Horários encontrados com sucesso",

@@ -6,7 +6,7 @@ const anoSemestreService = express.Router();
 anoSemestreService.get("/", async (req, res) => {
 	try {
 		const anosSemestres = await model.AnoSemestre.findAll({
-			order: [['ano', 'DESC'], ['semestre', 'ASC']]
+			order: [['inicio', 'DESC'], ['ano', 'DESC'], ['semestre', 'DESC']]
 		});
 
 		res.status(200).json({

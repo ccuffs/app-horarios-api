@@ -33,7 +33,7 @@ module.exports = (sequelize, DataTypes) => {
         {
             sequelize,
             tableName: "oferta",
-            schema: "public",
+            schema: "horarios",
             freezeTableName: true,
             timestamps: false,
         }

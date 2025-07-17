@@ -24,7 +24,7 @@ module.exports = (sequelize, DataTypes) => {
 		{
 			sequelize,
 			tableName: "ccr",
-			schema: "public",
+			schema: "horarios",
 			freezeTableName: true,
 			timestamps: false,
 		},

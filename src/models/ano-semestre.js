@@ -15,11 +15,6 @@ module.exports = (sequelize, DataTypes) => {
 				type: DataTypes.DATE,
 				allowNull: false,
 				defaultValue: DataTypes.NOW
-			},
-			publicado: {
-				type: DataTypes.BOOLEAN,
-				allowNull: false,
-				defaultValue: false
 			}
 		},
 		{
@@ -33,9 +28,12 @@ module.exports = (sequelize, DataTypes) => {
 
 	// Definir associações
 	AnoSemestre.associate = function(models) {
-		// Para chaves compostas, é melhor usar queries manuais
-		// ou criar um campo único para a associação
-		// Por enquanto, vamos remover a associação automática
+		// Associação com HorarioPublicado
+		AnoSemestre.hasOne(models.HorarioPublicado, {
+			foreignKey: ['ano', 'semestre'],
+			sourceKey: ['ano', 'semestre'],
+			as: 'horarioPublicado'
+		});
 	};
 
 	// Método para buscar ano/semestre com seus horários

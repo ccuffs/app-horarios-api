@@ -6,12 +6,26 @@ const anoSemestreService = express.Router();
 anoSemestreService.get("/", async (req, res) => {
 	try {
 		const anosSemestres = await model.AnoSemestre.findAll({
+			include: [{
+				model: model.HorarioPublicado,
+				as: 'horarioPublicado',
+				required: false // LEFT JOIN para incluir mesmo sem registro de publicação
+			}],
 			order: [['inicio', 'DESC'], ['ano', 'DESC'], ['semestre', 'DESC']]
 		});
 
+		// Formatear resposta para incluir status de publicação diretamente
+		const anosSemestresFormatados = anosSemestres.map(anoSemestre => ({
+			ano: anoSemestre.ano,
+			semestre: anoSemestre.semestre,
+			inicio: anoSemestre.inicio,
+			fim: anoSemestre.fim,
+			publicado: anoSemestre.horarioPublicado ? anoSemestre.horarioPublicado.publicado : false
+		}));
+
 		res.status(200).json({
-			anosSemestres: anosSemestres,
-			count: anosSemestres.length
+			anosSemestres: anosSemestresFormatados,
+			count: anosSemestresFormatados.length
 		});
 	} catch (error) {
 		console.error("Erro ao buscar anos/semestres:", error);
@@ -200,20 +214,12 @@ anoSemestreService.delete("/:ano/:semestre", async (req, res) => {
 	}
 });
 
-// PATCH - Alterar status de publicação do ano/semestre
-anoSemestreService.patch("/:ano/:semestre/publicacao", async (req, res) => {
+// GET - Buscar status de publicação de um ano/semestre específico
+anoSemestreService.get("/:ano/:semestre/publicacao", async (req, res) => {
 	try {
 		const { ano, semestre } = req.params;
-		const { publicado } = req.body;
 
-		// Validar parâmetro
-		if (typeof publicado !== 'boolean') {
-			return res.status(400).json({
-				message: "O campo 'publicado' deve ser um valor booleano (true/false)"
-			});
-		}
-
-		// Verificar se existe
+		// Verificar se ano/semestre existe
 		const anoSemestre = await model.AnoSemestre.findOne({
 			where: {
 				ano: parseInt(ano),
@@ -227,28 +233,62 @@ anoSemestreService.patch("/:ano/:semestre/publicacao", async (req, res) => {
 			});
 		}
 
-		// Atualizar status de publicação
-		await model.AnoSemestre.update(
-			{ publicado },
-			{
-				where: {
-					ano: parseInt(ano),
-					semestre: parseInt(semestre)
-				}
-			}
-		);
+		// Buscar status de publicação
+		const publicado = await model.HorarioPublicado.isPublicado(parseInt(ano), parseInt(semestre));
 
-		// Buscar o registro atualizado
-		const anoSemestreAtualizado = await model.AnoSemestre.findOne({
+		res.status(200).json({
+			ano: parseInt(ano),
+			semestre: parseInt(semestre),
+			publicado
+		});
+	} catch (error) {
+		console.error("Erro ao buscar status de publicação:", error);
+		res.status(500).json({
+			message: "Erro interno do servidor ao buscar status de publicação",
+			error: error.message
+		});
+	}
+});
+
+// PATCH - Alterar status de publicação do ano/semestre
+anoSemestreService.patch("/:ano/:semestre/publicacao", async (req, res) => {
+	try {
+		const { ano, semestre } = req.params;
+		const { publicado } = req.body;
+
+		// Validar parâmetro
+		if (typeof publicado !== 'boolean') {
+			return res.status(400).json({
+				message: "O campo 'publicado' deve ser um valor booleano (true/false)"
+			});
+		}
+
+		// Verificar se ano/semestre existe
+		const anoSemestre = await model.AnoSemestre.findOne({
 			where: {
 				ano: parseInt(ano),
 				semestre: parseInt(semestre)
 			}
 		});
 
+		if (!anoSemestre) {
+			return res.status(404).json({
+				message: `Ano/semestre ${ano}/${semestre} não encontrado`
+			});
+		}
+
+		// Atualizar status de publicação usando o novo modelo
+		const horarioPublicado = await model.HorarioPublicado.setPublicado(
+			parseInt(ano),
+			parseInt(semestre),
+			publicado
+		);
+
 		res.status(200).json({
 			message: `Horários ${publicado ? 'publicados' : 'despublicados'} com sucesso`,
-			anoSemestre: anoSemestreAtualizado
+			ano: parseInt(ano),
+			semestre: parseInt(semestre),
+			publicado: horarioPublicado.publicado
 		});
 	} catch (error) {
 		console.error("Erro ao atualizar status de publicação:", error);

@@ -19,6 +19,11 @@ module.exports = (sequelize, DataTypes) => {
 				type: DataTypes.STRING,
 				allowNull: false,
 			},
+			creditos: {
+				type: DataTypes.INTEGER,
+				allowNull: false,
+				defaultValue: 4,
+			},
 			ementa: DataTypes.STRING,
 		},
 		{

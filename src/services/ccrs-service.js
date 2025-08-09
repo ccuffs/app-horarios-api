@@ -1,73 +1,69 @@
-const express = require("express");
-const model = require("@backend/models");
-const ccrsService = express.Router();
+const ccrsRepository = require("../repository/ccrs-repository");
 
-ccrsService.get("/", async (req, res) => {
+// Função para retornar todos os CCRs
+const retornaTodosCCRs = async (req, res) => {
 	try {
-		const ccrs = await model.CCR.findAll({
-			include: [{
-				model: model.Curso,
-				as: 'cursos',
-				through: { attributes: [] } // Excluir atributos da tabela de junção
-			}],
-			order: [['nome', 'ASC']]
-		});
+		const ccrs = await ccrsRepository.obterTodosCCRs();
 		res.status(200).json({ ccrs: ccrs });
 	} catch (error) {
 		console.log("Erro ao buscar CCRs:", error);
 		res.sendStatus(500);
 	}
-});
+};
 
-ccrsService.post("/", async (req, res) => {
+// Função para criar um novo CCR
+const criaCCR = async (req, res) => {
 	const { formData, cursosSelecionados } = req.body;
 	console.log(formData, cursosSelecionados);
 
 	try {
 		// Criar o CCR
-		const ccr = await model.CCR.create(formData);
+		const ccr = await ccrsRepository.criarCCR(formData);
 
 		// Associar com os cursos selecionados
-		if (cursosSelecionados && cursosSelecionados.length > 0) {
-			await ccr.setCursos(cursosSelecionados);
-		}
+		await ccrsRepository.associarComCursos(ccr, cursosSelecionados);
 
 		res.sendStatus(200);
 	} catch (error) {
 		console.log("Erro ao criar CCR:", error);
 		res.sendStatus(500);
 	}
-});
+};
 
-ccrsService.put("/", async (req, res) => {
+// Função para atualizar um CCR
+const atualizaCCR = async (req, res) => {
 	const { formData, cursosSelecionados } = req.body;
 	try {
 		// Atualizar o CCR
-		await model.CCR.update(formData, {where: {id: formData.id} });
+		const sucesso = await ccrsRepository.atualizarCCR(
+			formData.id,
+			formData,
+		);
 
-		// Buscar o CCR atualizado
-		const ccr = await model.CCR.findByPk(formData.id);
+		if (sucesso) {
+			// Buscar o CCR atualizado
+			const ccr = await ccrsRepository.obterCCRPorId(formData.id);
 
-		// Atualizar as associações com cursos
-		if (cursosSelecionados) {
-			await ccr.setCursos(cursosSelecionados);
+			// Atualizar as associações com cursos
+			await ccrsRepository.associarComCursos(ccr, cursosSelecionados);
+
+			res.sendStatus(200);
+		} else {
+			res.status(404).send({ message: "CCR não encontrado" });
 		}
-
-		res.sendStatus(200);
 	} catch (error) {
 		console.log("Erro ao atualizar CCR:", error);
 		res.sendStatus(500);
 	}
-});
+};
 
-ccrsService.delete("/:id", async (req, res) => {
+// Função para deletar um CCR
+const deletaCCR = async (req, res) => {
 	try {
 		const id = req.params.id;
-		const deleted = await model.CCR.destroy({
-			where: { id: id },
-		});
+		const sucesso = await ccrsRepository.deletarCCR(id);
 
-		if (deleted) {
+		if (sucesso) {
 			res.sendStatus(200);
 		} else {
 			res.status(404).send({ message: "CCR não encontrado" });
@@ -76,6 +72,11 @@ ccrsService.delete("/:id", async (req, res) => {
 		console.error("Erro ao deletar CCR:", error);
 		res.status(500).send({ message: "Erro ao deletar CCR" });
 	}
-});
+};
 
-module.exports = ccrsService;
+module.exports = {
+	retornaTodosCCRs,
+	criaCCR,
+	atualizaCCR,
+	deletaCCR,
+};

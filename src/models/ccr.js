@@ -30,19 +30,19 @@ module.exports = (sequelize, DataTypes) => {
 		},
 	);
 
-	CCR.associate = function(models) {
+	CCR.associate = function (models) {
 		// Associação many-to-many com Curso através da tabela curso_ccr
 		CCR.belongsToMany(models.Curso, {
 			through: models.CursoCcr,
-			foreignKey: 'id_ccr',
-			otherKey: 'id_curso',
-			as: 'cursos'
+			foreignKey: "id_ccr",
+			otherKey: "id_curso",
+			as: "cursos",
 		});
 
 		// Associação com Horario
 		CCR.hasMany(models.Horario, {
-			foreignKey: 'id_ccr',
-			as: 'horarios'
+			foreignKey: "id_ccr",
+			as: "horarios",
 		});
 	};
 

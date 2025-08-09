@@ -10,8 +10,8 @@ module.exports = (sequelize, DataTypes) => {
 				allowNull: false,
 				references: {
 					model: "curso",
-					key: "id"
-				}
+					key: "id",
+				},
 			},
 			id_ccr: {
 				type: DataTypes.INTEGER,
@@ -19,8 +19,8 @@ module.exports = (sequelize, DataTypes) => {
 				allowNull: false,
 				references: {
 					model: "ccr",
-					key: "id"
-				}
+					key: "id",
+				},
 			},
 		},
 		{
@@ -32,18 +32,18 @@ module.exports = (sequelize, DataTypes) => {
 		},
 	);
 
-	CursoCcr.associate = function(models) {
+	CursoCcr.associate = function (models) {
 		// Associações corretas para tabela de junção
 		CursoCcr.belongsTo(models.Curso, {
-			foreignKey: 'id_curso',
-			targetKey: 'id',
-			as: 'curso'
+			foreignKey: "id_curso",
+			targetKey: "id",
+			as: "curso",
 		});
 
 		CursoCcr.belongsTo(models.CCR, {
-			foreignKey: 'id_ccr',
-			targetKey: 'id',
-			as: 'ccr'
+			foreignKey: "id_ccr",
+			targetKey: "id",
+			as: "ccr",
 		});
 	};
 

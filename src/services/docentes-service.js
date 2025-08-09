@@ -1,50 +1,55 @@
-const express = require("express");
-const model = require("@backend/models");
-const docentesService = express.Router();
+const docentesRepository = require("../repository/docentes-repository");
 
-docentesService.get("/", async (req, res) => {
+// Função para retornar todos os docentes
+const retornaTodosDocentes = async (req, res) => {
 	try {
-		const profs = await model.Docente.findAll({ order: [["nome", "ASC"]] });
-		res.status(200).json({ docentes: profs });
+		const docentes = await docentesRepository.obterTodosDocentes();
+		res.status(200).json({ docentes: docentes });
 	} catch (error) {
 		console.log("Erro ao buscar docentes:", error);
 		res.sendStatus(500);
 	}
-});
+};
 
-docentesService.post("/", async (req, res) => {
+// Função para criar um novo docente
+const criaDocente = async (req, res) => {
 	const formData = req.body.formData;
 	try {
-		const prof = model.Docente.build(formData);
-		await prof.save();
+		const docente = await docentesRepository.criarDocente(formData);
 		res.sendStatus(200);
 	} catch (error) {
 		console.log("Erro ao criar docente:", error);
 		res.sendStatus(500);
 	}
-});
+};
 
-docentesService.put("/", async (req, res) => {
+// Função para atualizar um docente
+const atualizaDocente = async (req, res) => {
 	const formData = req.body.formData;
 	try {
-		await model.Docente.update(formData, {
-			where: { codigo: formData.codigo },
-		});
-		res.sendStatus(200);
+		const sucesso = await docentesRepository.atualizarDocente(
+			formData.codigo,
+			formData,
+		);
+
+		if (sucesso) {
+			res.sendStatus(200);
+		} else {
+			res.status(404).send({ message: "Docente não encontrado" });
+		}
 	} catch (error) {
 		console.log("Erro ao atualizar docente:", error);
 		res.sendStatus(500);
 	}
-});
+};
 
-docentesService.delete("/:codigo", async (req, res) => {
+// Função para deletar um docente
+const deletaDocente = async (req, res) => {
 	try {
 		const codigo = req.params.codigo;
-		const deleted = await model.Docente.destroy({
-			where: { codigo: codigo },
-		});
+		const sucesso = await docentesRepository.deletarDocente(codigo);
 
-		if (deleted) {
+		if (sucesso) {
 			res.sendStatus(200);
 		} else {
 			res.status(404).send({ message: "Docente não encontrado" });
@@ -53,6 +58,11 @@ docentesService.delete("/:codigo", async (req, res) => {
 		console.error("Erro ao deletar docente:", error);
 		res.status(500).send({ message: "Erro ao deletar docente" });
 	}
-});
+};
 
-module.exports = docentesService;
+module.exports = {
+	retornaTodosDocentes,
+	criaDocente,
+	atualizaDocente,
+	deletaDocente,
+};

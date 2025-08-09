@@ -56,7 +56,7 @@ module.exports = (sequelize, DataTypes) => {
 			comentario: DataTypes.STRING,
 			id: {
 				type: DataTypes.STRING,
-				allowNull: false
+				allowNull: false,
 			},
 			permitirconflito: {
 				type: DataTypes.BOOLEAN,

@@ -22,40 +22,40 @@ module.exports = (sequelize, DataTypes) => {
 		},
 	);
 
-	Curso.associate = function(models) {
+	Curso.associate = function (models) {
 		// Associação many-to-many com Docente através da tabela docente_curso
 		Curso.belongsToMany(models.Docente, {
 			through: models.DocenteCurso,
-			foreignKey: 'id_curso',
-			otherKey: 'codigo_docente',
-			as: 'docentes'
+			foreignKey: "id_curso",
+			otherKey: "codigo_docente",
+			as: "docentes",
 		});
 
 		// Associação many-to-many com CCR através da tabela curso_ccr
 		Curso.belongsToMany(models.CCR, {
 			through: models.CursoCcr,
-			foreignKey: 'id_curso',
-			otherKey: 'id_ccr',
-			as: 'ccrs'
+			foreignKey: "id_curso",
+			otherKey: "id_ccr",
+			as: "ccrs",
 		});
 
 		// Associação many-to-many com Usuario através da tabela usuario_curso
 		Curso.belongsToMany(models.Usuario, {
 			through: models.UsuarioCurso,
-			foreignKey: 'id_curso',
-			otherKey: 'id_usuario',
-			as: 'usuarios'
+			foreignKey: "id_curso",
+			otherKey: "id_usuario",
+			as: "usuarios",
 		});
 
 		// Associações com outras tabelas
 		Curso.hasMany(models.Horario, {
-			foreignKey: 'id_curso',
-			as: 'horarios'
+			foreignKey: "id_curso",
+			as: "horarios",
 		});
 
 		Curso.hasMany(models.Oferta, {
-			foreignKey: 'id_curso',
-			as: 'ofertas'
+			foreignKey: "id_curso",
+			as: "ofertas",
 		});
 	};
 

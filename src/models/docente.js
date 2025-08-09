@@ -15,6 +15,14 @@ module.exports = (sequelize, DataTypes) => {
 			},
 			nome: DataTypes.STRING,
 			sala: DataTypes.INTEGER,
+			id_usuario: {
+				type: DataTypes.STRING,
+				allowNull: true,
+				references: {
+					model: "usuario",
+					key: "id",
+				},
+			},
 		},
 		{
 			sequelize,
@@ -25,19 +33,25 @@ module.exports = (sequelize, DataTypes) => {
 		},
 	);
 
-	Docente.associate = function(models) {
+	Docente.associate = function (models) {
 		// Associação many-to-many com Curso através da tabela docente_curso
 		Docente.belongsToMany(models.Curso, {
 			through: models.DocenteCurso,
-			foreignKey: 'codigo_docente',
-			otherKey: 'id_curso',
-			as: 'cursos'
+			foreignKey: "codigo_docente",
+			otherKey: "id_curso",
+			as: "cursos",
 		});
 
 		// Associação com Horario
 		Docente.hasMany(models.Horario, {
-			foreignKey: 'codigo_docente',
-			as: 'horarios'
+			foreignKey: "codigo_docente",
+			as: "horarios",
+		});
+
+		// Associação com Usuario (FK opcional)
+		Docente.belongsTo(models.Usuario, {
+			foreignKey: "id_usuario",
+			as: "usuario",
 		});
 	};
 

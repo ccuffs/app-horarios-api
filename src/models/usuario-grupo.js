@@ -1,15 +1,15 @@
 "use strict";
 
 module.exports = (sequelize, DataTypes) => {
-	const UsuarioCurso = sequelize.define(
-		"UsuarioCurso",
+	const UsuarioGrupo = sequelize.define(
+		"UsuarioGrupo",
 		{
-			id_curso: {
+			id_grupo: {
 				type: DataTypes.INTEGER,
 				primaryKey: true,
 				allowNull: false,
 				references: {
-					model: "curso",
+					model: "grupo",
 					key: "id",
 				},
 			},
@@ -25,27 +25,26 @@ module.exports = (sequelize, DataTypes) => {
 		},
 		{
 			sequelize,
-			tableName: "usuario_curso",
+			tableName: "usuario_grupo",
 			schema: "public",
 			freezeTableName: true,
 			timestamps: false,
 		},
 	);
 
-	UsuarioCurso.associate = function (models) {
-		// Associações corretas para tabela de junção
-		UsuarioCurso.belongsTo(models.Curso, {
-			foreignKey: "id_curso",
+	UsuarioGrupo.associate = function (models) {
+		// Associação com Grupo
+		UsuarioGrupo.belongsTo(models.Grupo, {
+			foreignKey: "id_grupo",
 			targetKey: "id",
-			as: "curso",
 		});
 
-		UsuarioCurso.belongsTo(models.Usuario, {
+		// Associação com Usuario
+		UsuarioGrupo.belongsTo(models.Usuario, {
 			foreignKey: "id_usuario",
 			targetKey: "id",
-			as: "usuario",
 		});
 	};
 
-	return UsuarioCurso;
+	return UsuarioGrupo;
 };

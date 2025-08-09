@@ -1,20 +1,19 @@
 require("module-alias/register");
-require('dotenv').config({ path: '../.env' })
+require("dotenv").config({ path: "../.env" });
 
 const express = require("express");
 const cors = require("cors");
 const helmet = require("helmet");
 const morgan = require("morgan");
 
-
 const app = express();
-const docentesService = require("./services/docentes-service");
-const cursosService = require("./services/cursos-service");
-const ccrsService = require("./services/ccrs-service");
-const horariosService = require("./services/horarios-service");
-const anoSemestreService = require("./services/ano-semestre-service");
-const ofertasService = require("./services/ofertas-service");
-const usuariosService = require("./services/usuarios-service");
+const docentesController = require("./controllers/docentes-controller");
+const cursosController = require("./controllers/cursos-controller");
+const ccrsController = require("./controllers/ccrs-controller");
+const horariosController = require("./controllers/horarios-controller");
+const anoSemestreController = require("./controllers/ano-semestre-controller");
+const ofertasController = require("./controllers/ofertas-controller");
+const usuariosController = require("./controllers/usuarios-controller");
 
 app.use(cors());
 app.use(express.json());
@@ -22,17 +21,16 @@ app.use(express.static(__dirname + "/public"));
 app.use(helmet());
 app.use(morgan("combined"));
 
-
 app.listen(3010, () => console.log("Servidor rodando na porta 3010."));
 
 app.get("/", (req, res) => {
 	res.send("Hello, world!");
 });
 
-app.use("/api/ccrs", ccrsService);
-app.use("/api/cursos", cursosService);
-app.use("/api/docentes", docentesService);
-app.use("/api/horarios", horariosService);
-app.use("/api/ano-semestre", anoSemestreService);
-app.use("/api/ofertas", ofertasService);
-app.use("/api/usuarios", usuariosService);
+app.use("/api/ccrs", ccrsController);
+app.use("/api/cursos", cursosController);
+app.use("/api/docentes", docentesController);
+app.use("/api/horarios", horariosController);
+app.use("/api/ano-semestre", anoSemestreController);
+app.use("/api/ofertas", ofertasController);
+app.use("/api/usuarios", usuariosController);

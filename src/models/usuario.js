@@ -21,13 +21,27 @@ module.exports = (sequelize, DataTypes) => {
 		},
 	);
 
-	Usuario.associate = function(models) {
+	Usuario.associate = function (models) {
 		// Associação many-to-many com Curso através da tabela usuario_curso
 		Usuario.belongsToMany(models.Curso, {
 			through: models.UsuarioCurso,
-			foreignKey: 'id_usuario',
-			otherKey: 'id_curso',
-			as: 'cursos'
+			foreignKey: "id_usuario",
+			otherKey: "id_curso",
+			as: "cursos",
+		});
+
+		// Associação many-to-many com Grupo através da tabela usuario_grupo
+		Usuario.belongsToMany(models.Grupo, {
+			through: models.UsuarioGrupo,
+			foreignKey: "id_usuario",
+			otherKey: "id_grupo",
+			as: "grupos",
+		});
+
+		// Associação 1:N com Docente via id_usuario
+		Usuario.hasMany(models.Docente, {
+			foreignKey: "id_usuario",
+			as: "docentes",
 		});
 	};
 

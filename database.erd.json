@@ -4,8 +4,8 @@
   "settings": {
     "width": 2000,
     "height": 2000,
-    "scrollTop": 0,
-    "scrollLeft": -176,
+    "scrollTop": -2,
+    "scrollLeft": -630,
     "zoomLevel": 0.98,
     "show": 431,
     "database": 16,
@@ -327,7 +327,7 @@
           "color": ""
         },
         "meta": {
-          "updateAt": 1753478118960,
+          "updateAt": 1753478961845,
           "createAt": 1749746623530
         }
       },

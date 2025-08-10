@@ -52,4 +52,20 @@ horariosController.post(
 	horariosService.salvaHorariosBulk,
 );
 
+// GET - Buscar horários de anos/semestres anteriores para importação
+horariosController.get(
+	"/importacao",
+	auth.autenticarUsuario,
+	autorizacao.verificarPermissao(Permissoes.HORARIOS.CRIAR),
+	horariosService.retornaHorariosParaImportacao,
+);
+
+// POST - Importar horários de ano/semestre anterior
+horariosController.post(
+	"/importar",
+	auth.autenticarUsuario,
+	autorizacao.verificarPermissao(Permissoes.HORARIOS.CRIAR),
+	horariosService.importarHorarios,
+);
+
 module.exports = horariosController;

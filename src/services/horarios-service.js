@@ -1,4 +1,6 @@
 const horariosRepository = require("../repository/horarios-repository");
+const ofertasRepository = require("../repository/ofertas-repository");
+const model = require("../models");
 
 // Função para retornar horários
 const retornaHorarios = async (req, res) => {
@@ -208,10 +210,161 @@ const salvaHorariosBulk = async (req, res) => {
 	}
 };
 
+// Função para buscar horários de anos/semestres anteriores para importação
+const retornaHorariosParaImportacao = async (req, res) => {
+	try {
+		const { ano_origem, semestre_origem, id_curso } = req.query;
+
+		// Validar parâmetros obrigatórios
+		if (!ano_origem || !semestre_origem || !id_curso) {
+			return res.status(400).json({
+				message: "Parâmetros obrigatórios: ano_origem, semestre_origem, id_curso",
+			});
+		}
+
+		// Buscar horários do ano/semestre de origem
+		const horarios = await horariosRepository.obterHorarios(
+			ano_origem,
+			semestre_origem,
+			id_curso,
+		);
+
+		res.status(200).json({
+			message: "Horários para importação encontrados com sucesso",
+			horarios: horarios,
+			count: horarios.length,
+		});
+	} catch (error) {
+		console.error("Erro ao buscar horários para importação:", error);
+		res.status(500).json({
+			message: "Erro interno do servidor ao buscar horários para importação",
+			error: error.message,
+		});
+	}
+};
+
+// Função para importar horários de ano/semestre anterior
+const importarHorarios = async (req, res) => {
+	// Iniciar transação
+	const transaction = await model.sequelize.transaction();
+
+	try {
+		const { ano_origem, semestre_origem, ano_destino, semestre_destino, id_curso, incluir_docentes, incluir_ofertas } = req.body;
+
+		// Validar parâmetros obrigatórios
+		if (!ano_origem || !semestre_origem || !ano_destino || !semestre_destino || !id_curso) {
+			await transaction.rollback();
+			return res.status(400).json({
+				message: "Parâmetros obrigatórios: ano_origem, semestre_origem, ano_destino, semestre_destino, id_curso",
+			});
+		}
+
+		// Buscar horários do ano/semestre de origem
+		const horariosOrigem = await horariosRepository.obterHorarios(
+			ano_origem,
+			semestre_origem,
+			id_curso,
+		);
+
+		if (horariosOrigem.length === 0) {
+			await transaction.rollback();
+			return res.status(404).json({
+				message: "Nenhum horário encontrado no ano/semestre de origem",
+			});
+		}
+
+		// Preparar horários para importação
+		const horariosParaImportar = horariosOrigem.map((horario, index) => {
+			// Gerar ID único seguindo a mesma regra do frontend com contador para garantir unicidade
+			const timestamp = Date.now();
+			const novoId = `horario-${horario.fase}-${timestamp}-${index}`;
+
+			const novoHorario = {
+				id: novoId, // ID único gerado
+				ano: parseInt(ano_destino),
+				semestre: parseInt(semestre_destino),
+				id_curso: parseInt(id_curso),
+				id_ccr: horario.id_ccr,
+				dia_semana: horario.dia_semana,
+				fase: horario.fase,
+				hora_inicio: horario.hora_inicio,
+				duracao: horario.duracao,
+			};
+
+			// Definir código do docente baseado na opção selecionada
+			if (incluir_docentes && horario.codigo_docente) {
+				// Se solicitado incluir docentes e existe código do docente, usar o original
+				novoHorario.codigo_docente = horario.codigo_docente;
+			} else {
+				// Se não incluir docentes, usar "sem.professor"
+				novoHorario.codigo_docente = "sem.professor";
+			}
+
+			return novoHorario;
+		});
+
+		// Salvar horários importados dentro da transação
+		for (const horario of horariosParaImportar) {
+			await model.Horario.upsert(horario, { transaction });
+		}
+
+		// Importar ofertas se solicitado
+		let ofertasImportadas = 0;
+		if (incluir_ofertas) {
+			// Buscar ofertas do ano/semestre de origem
+			const ofertasOrigem = await ofertasRepository.obterOfertas({
+				ano: parseInt(ano_origem),
+				semestre: parseInt(semestre_origem),
+				id_curso: parseInt(id_curso),
+			});
+
+			if (ofertasOrigem.length > 0) {
+				// Preparar ofertas para importação
+				const ofertasParaImportar = ofertasOrigem.map(oferta => ({
+					ano: parseInt(ano_destino),
+					semestre: parseInt(semestre_destino),
+					id_curso: parseInt(id_curso),
+					fase: oferta.fase,
+					turno: oferta.turno,
+				}));
+
+				// Salvar ofertas importadas dentro da transação
+				for (const oferta of ofertasParaImportar) {
+					await model.Oferta.upsert(oferta, { transaction });
+				}
+
+				ofertasImportadas = ofertasParaImportar.length;
+			}
+		}
+
+		// Commit da transação se tudo ocorreu com sucesso
+		await transaction.commit();
+
+		res.status(200).json({
+			message: "Importação realizada com sucesso",
+			horarios_importados: horariosParaImportar.length,
+			ofertas_importadas: ofertasImportadas,
+			incluiu_docentes: incluir_docentes,
+			incluiu_ofertas: incluir_ofertas,
+		});
+	} catch (error) {
+		// Rollback da transação em caso de erro
+		await transaction.rollback();
+
+		console.error("Erro ao importar horários:", error);
+		res.status(500).json({
+			message: "Erro interno do servidor ao importar horários. Todas as alterações foram desfeitas.",
+			error: error.message,
+		});
+	}
+};
+
 module.exports = {
 	retornaHorarios,
 	retornaHorarioPorId,
 	atualizaHorario,
 	deletaHorario,
 	salvaHorariosBulk,
+	retornaHorariosParaImportacao,
+	importarHorarios,
 };

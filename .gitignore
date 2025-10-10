@@ -133,3 +133,6 @@ dist
 *.py
 *.txt
 *.sql
+
+src/public/*
+!src/public/.gitkeep

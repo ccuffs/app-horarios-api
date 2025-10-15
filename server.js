@@ -1,5 +1,5 @@
 require("module-alias/register");
-require("dotenv").config({ path: "../.env" });
+require("dotenv").config();
 
 const express = require("express");
 const cors = require("cors");
@@ -9,16 +9,16 @@ const morgan = require("morgan");
 const port = process.env.SERVERPORT || 3010;
 
 const app = express();
-const { passport } = require("./middleware/auth");
-const docentesController = require("./controllers/docentes-controller");
-const cursosController = require("./controllers/cursos-controller");
-const ccrsController = require("./controllers/ccrs-controller");
-const horariosController = require("./controllers/horarios-controller");
-const anoSemestreController = require("./controllers/ano-semestre-controller");
-const ofertasController = require("./controllers/ofertas-controller");
-const usuariosController = require("./controllers/usuarios-controller");
-const authController = require("./controllers/auth-controller");
-const publicController = require("./controllers/public-controller");
+const { passport } = require("./src/middleware/auth");
+const docentesController = require("./src/controllers/docentes-controller");
+const cursosController = require("./src/controllers/cursos-controller");
+const ccrsController = require("./src/controllers/ccrs-controller");
+const horariosController = require("./src/controllers/horarios-controller");
+const anoSemestreController = require("./src/controllers/ano-semestre-controller");
+const ofertasController = require("./src/controllers/ofertas-controller");
+const usuariosController = require("./src/controllers/usuarios-controller");
+const authController = require("./src/controllers/auth-controller");
+const publicController = require("./src/controllers/public-controller");
 
 app.use(cors());
 app.use(express.json());

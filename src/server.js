@@ -6,6 +6,8 @@ const cors = require("cors");
 const helmet = require("helmet");
 const morgan = require("morgan");
 
+const port = process.env.SERVERPORT || 3010;
+
 const app = express();
 const { passport } = require("./middleware/auth");
 const docentesController = require("./controllers/docentes-controller");
@@ -25,7 +27,7 @@ app.use(helmet());
 app.use(morgan("combined"));
 app.use(passport.initialize());
 
-app.listen(3010, () => console.log("Servidor rodando na porta 3010."));
+app.listen(port, () => console.log(`Servidor rodando na porta ${port}.`));
 
 app.get("/", (req, res) => {
 	res.send("Hello, world!");

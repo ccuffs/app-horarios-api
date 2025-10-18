@@ -44,6 +44,7 @@ module.exports = (sequelize, DataTypes) => {
 		schema: "public",
 		freezeTableName: true,
 		timestamps: true,
+		paranoid: true,
 	},
 	);
 

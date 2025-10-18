@@ -34,11 +34,11 @@ module.exports = (sequelize, DataTypes) => {
 				type: DataTypes.DATE,
 				defaultValue: DataTypes.literal("CURRENT_TIMESTAMP"),
 			},
-		updatedAt: {
-			allowNull: false,
-			type: DataTypes.DATE,
-			defaultValue: DataTypes.literal("CURRENT_TIMESTAMP"),
-		},
+			updatedAt: {
+				allowNull: false,
+				type: DataTypes.DATE,
+				defaultValue: DataTypes.literal("CURRENT_TIMESTAMP"),
+			},
 			deletedAt: {
 				allowNull: true,
 				type: DataTypes.DATE,
@@ -50,6 +50,7 @@ module.exports = (sequelize, DataTypes) => {
 			schema: "public",
 			freezeTableName: true,
 			timestamps: true,
+			paranoid: true,
 		},
 	);
 

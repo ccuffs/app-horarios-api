@@ -4,16 +4,10 @@ module.exports = {
 		await queryInterface.sequelize.query(
 			`CREATE SCHEMA IF NOT EXISTS public;`,
 		);
-
-		await queryInterface.sequelize.query(
-			`CREATE SCHEMA IF NOT EXISTS horarios;`,
-		);
 	},
 
 	async down(queryInterface, Sequelize) {
-		await queryInterface.sequelize.query(
-			`DROP SCHEMA IF EXISTS horarios CASCADE;`,
-		);
+		// Schema public é padrão e não deve ser removido
 	},
 };
 

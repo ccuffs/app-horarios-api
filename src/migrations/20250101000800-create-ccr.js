@@ -1,7 +1,7 @@
 "use strict";
 module.exports = {
 	table: {
-		schema: "horarios",
+		schema: "public",
 		tableName: "ccr",
 	},
 

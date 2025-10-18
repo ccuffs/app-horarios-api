@@ -1,7 +1,7 @@
 "use strict";
 module.exports = {
 	table: {
-		schema: "horarios",
+		schema: "public",
 		tableName: "horario",
 	},
 
@@ -27,7 +27,7 @@ module.exports = {
 				allowNull: false,
 				references: {
 					model: {
-						schema: "horarios",
+						schema: "public",
 						tableName: "ccr",
 					},
 					key: "id",
@@ -100,7 +100,7 @@ module.exports = {
 
 		// Adicionar constraint de foreign key composta para ano_semestre
 		await queryInterface.sequelize.query(`
-			ALTER TABLE horarios.horario
+			ALTER TABLE public.horario
 			ADD CONSTRAINT fk_ano_semestre_to_horarios
 			FOREIGN KEY (ano, semestre)
 			REFERENCES public.ano_semestre(ano, semestre)

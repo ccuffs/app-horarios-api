@@ -1,7 +1,7 @@
 "use strict";
 module.exports = {
 	table: {
-		schema: "horarios",
+		schema: "public",
 		tableName: "curso_ccr",
 	},
 
@@ -27,7 +27,7 @@ module.exports = {
 				allowNull: false,
 				references: {
 					model: {
-						schema: "horarios",
+						schema: "public",
 						tableName: "ccr",
 					},
 					key: "id",

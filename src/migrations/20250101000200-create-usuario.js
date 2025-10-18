@@ -42,10 +42,39 @@ module.exports = {
 			this.table,
 			this.getTableData(Sequelize),
 		);
+
+		// Criar função para atualizar automaticamente o campo updatedAt (apenas na primeira migration)
+		await queryInterface.sequelize.query(`
+			CREATE OR REPLACE FUNCTION update_updated_at_column()
+			RETURNS TRIGGER AS $$
+			BEGIN
+				NEW."updatedAt" = CURRENT_TIMESTAMP;
+				RETURN NEW;
+			END;
+			$$ language 'plpgsql';
+		`);
+
+		// Criar trigger para esta tabela
+		await queryInterface.sequelize.query(`
+			CREATE TRIGGER update_usuario_updated_at
+			BEFORE UPDATE ON public.usuario
+			FOR EACH ROW
+			EXECUTE FUNCTION update_updated_at_column();
+		`);
 	},
 
 	async down(queryInterface, Sequelize) {
+		// Remover trigger
+		await queryInterface.sequelize.query(`
+			DROP TRIGGER IF EXISTS update_usuario_updated_at ON public.usuario;
+		`);
+
 		await queryInterface.dropTable(this.table);
+
+		// Remover função (apenas na primeira migration)
+		await queryInterface.sequelize.query(`
+			DROP FUNCTION IF EXISTS update_updated_at_column();
+		`);
 	},
 };
 

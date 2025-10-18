@@ -57,9 +57,22 @@ module.exports = {
 			this.table,
 			this.getTableData(Sequelize),
 		);
+
+		// Criar trigger para esta tabela
+		await queryInterface.sequelize.query(`
+			CREATE TRIGGER update_curso_ccr_updated_at
+			BEFORE UPDATE ON public.curso_ccr
+			FOR EACH ROW
+			EXECUTE FUNCTION update_updated_at_column();
+		`);
 	},
 
 	async down(queryInterface, Sequelize) {
+		// Remover trigger
+		await queryInterface.sequelize.query(`
+			DROP TRIGGER IF EXISTS update_curso_ccr_updated_at ON public.curso_ccr;
+		`);
+
 		await queryInterface.dropTable(this.table);
 	},
 };

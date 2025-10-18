@@ -121,9 +121,22 @@ module.exports = {
 			ON UPDATE CASCADE
 			ON DELETE CASCADE;
 		`);
+
+		// Criar trigger para esta tabela
+		await queryInterface.sequelize.query(`
+			CREATE TRIGGER update_horario_updated_at
+			BEFORE UPDATE ON public.horario
+			FOR EACH ROW
+			EXECUTE FUNCTION update_updated_at_column();
+		`);
 	},
 
 	async down(queryInterface, Sequelize) {
+		// Remover trigger
+		await queryInterface.sequelize.query(`
+			DROP TRIGGER IF EXISTS update_horario_updated_at ON public.horario;
+		`);
+
 		await queryInterface.dropTable(this.table);
 	},
 };

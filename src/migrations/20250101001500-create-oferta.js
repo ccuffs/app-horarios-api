@@ -73,9 +73,22 @@ module.exports = {
 			ON UPDATE CASCADE
 			ON DELETE CASCADE;
 		`);
+
+		// Criar trigger para esta tabela
+		await queryInterface.sequelize.query(`
+			CREATE TRIGGER update_oferta_updated_at
+			BEFORE UPDATE ON public.oferta
+			FOR EACH ROW
+			EXECUTE FUNCTION update_updated_at_column();
+		`);
 	},
 
 	async down(queryInterface, Sequelize) {
+		// Remover trigger
+		await queryInterface.sequelize.query(`
+			DROP TRIGGER IF EXISTS update_oferta_updated_at ON public.oferta;
+		`);
+
 		await queryInterface.dropTable(this.table);
 	},
 };

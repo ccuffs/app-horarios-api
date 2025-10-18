@@ -9,18 +9,32 @@ module.exports = (sequelize, DataTypes) => {
 				primaryKey: true,
 				allowNull: false,
 			},
-			descricao: {
-				type: DataTypes.STRING,
-				allowNull: false,
-			},
+		descricao: {
+			type: DataTypes.STRING,
+			allowNull: false,
 		},
-		{
-			sequelize,
-			tableName: "categoria_permissao",
-			schema: "public",
-			freezeTableName: true,
-			timestamps: false,
+		createdAt: {
+			allowNull: false,
+			type: DataTypes.DATE,
+			defaultValue: DataTypes.literal("CURRENT_TIMESTAMP"),
 		},
+		updatedAt: {
+			allowNull: false,
+			type: DataTypes.DATE,
+			defaultValue: DataTypes.literal("CURRENT_TIMESTAMP"),
+		},
+		deletedAt: {
+			allowNull: true,
+			type: DataTypes.DATE,
+		},
+	},
+	{
+		sequelize,
+		tableName: "categoria_permissao",
+		schema: "public",
+		freezeTableName: true,
+		timestamps: true,
+	},
 	);
 
 	CategoriaPermissao.associate = function (models) {

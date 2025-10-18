@@ -13,23 +13,37 @@ module.exports = (sequelize, DataTypes) => {
 					key: "id",
 				},
 			},
-			id_permissao: {
-				type: DataTypes.INTEGER,
-				primaryKey: true,
-				allowNull: false,
-				references: {
-					model: "permissao",
-					key: "id",
-				},
+		id_permissao: {
+			type: DataTypes.INTEGER,
+			primaryKey: true,
+			allowNull: false,
+			references: {
+				model: "permissao",
+				key: "id",
 			},
 		},
-		{
-			sequelize,
-			tableName: "grupo_permissao",
-			schema: "public",
-			freezeTableName: true,
-			timestamps: false,
+		createdAt: {
+			allowNull: false,
+			type: DataTypes.DATE,
+			defaultValue: DataTypes.literal("CURRENT_TIMESTAMP"),
 		},
+		updatedAt: {
+			allowNull: false,
+			type: DataTypes.DATE,
+			defaultValue: DataTypes.literal("CURRENT_TIMESTAMP"),
+		},
+		deletedAt: {
+			allowNull: true,
+			type: DataTypes.DATE,
+		},
+	},
+	{
+		sequelize,
+		tableName: "grupo_permissao",
+		schema: "public",
+		freezeTableName: true,
+		timestamps: true,
+	},
 	);
 
 	GrupoPermissao.associate = function (models) {

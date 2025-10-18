@@ -9,16 +9,30 @@ module.exports = (sequelize, DataTypes) => {
 				primaryKey: true,
 				allowNull: false,
 			},
-			nome: DataTypes.STRING,
-			email: DataTypes.STRING,
+		nome: DataTypes.STRING,
+		email: DataTypes.STRING,
+		createdAt: {
+			allowNull: false,
+			type: DataTypes.DATE,
+			defaultValue: DataTypes.literal("CURRENT_TIMESTAMP"),
 		},
-		{
-			sequelize,
-			tableName: "usuario",
-			schema: "public",
-			freezeTableName: true,
-			timestamps: false,
+		updatedAt: {
+			allowNull: false,
+			type: DataTypes.DATE,
+			defaultValue: DataTypes.literal("CURRENT_TIMESTAMP"),
 		},
+		deletedAt: {
+			allowNull: true,
+			type: DataTypes.DATE,
+		},
+	},
+	{
+		sequelize,
+		tableName: "usuario",
+		schema: "public",
+		freezeTableName: true,
+		timestamps: true,
+	},
 	);
 
 	Usuario.associate = function (models) {

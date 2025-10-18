@@ -29,13 +29,27 @@ module.exports = (sequelize, DataTypes) => {
 				allowNull: true,
 				defaultValue: false,
 			},
+			createdAt: {
+				allowNull: false,
+				type: DataTypes.DATE,
+				defaultValue: DataTypes.literal("CURRENT_TIMESTAMP"),
+			},
+		updatedAt: {
+			allowNull: false,
+			type: DataTypes.DATE,
+			defaultValue: DataTypes.literal("CURRENT_TIMESTAMP"),
+		},
+			deletedAt: {
+				allowNull: true,
+				type: DataTypes.DATE,
+			},
 		},
 		{
 			sequelize,
 			tableName: "ano_semestre",
 			schema: "public",
 			freezeTableName: true,
-			timestamps: false,
+			timestamps: true,
 		},
 	);
 

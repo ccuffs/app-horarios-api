@@ -21,22 +21,36 @@ module.exports = {
 				onUpdate: "CASCADE",
 				onDelete: "CASCADE",
 			},
-			codigo_docente: {
-				type: Sequelize.STRING,
-				primaryKey: true,
-				allowNull: false,
-				references: {
-					model: {
-						schema: "public",
-						tableName: "docente",
-					},
-					key: "codigo",
+		codigo_docente: {
+			type: Sequelize.STRING,
+			primaryKey: true,
+			allowNull: false,
+			references: {
+				model: {
+					schema: "public",
+					tableName: "docente",
 				},
-				onUpdate: "CASCADE",
-				onDelete: "CASCADE",
+				key: "codigo",
 			},
-		};
-	},
+			onUpdate: "CASCADE",
+			onDelete: "CASCADE",
+		},
+		createdAt: {
+			allowNull: false,
+			type: Sequelize.DATE,
+			defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
+		},
+		updatedAt: {
+			allowNull: false,
+			type: Sequelize.DATE,
+			defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
+		},
+		deletedAt: {
+			allowNull: true,
+			type: Sequelize.DATE,
+		},
+	};
+},
 
 	async up(queryInterface, Sequelize) {
 		await queryInterface.createTable(

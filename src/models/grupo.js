@@ -17,19 +17,33 @@ module.exports = (sequelize, DataTypes) => {
 				type: DataTypes.STRING,
 				allowNull: true,
 			},
-			sistema: {
-				type: DataTypes.INTEGER,
-				allowNull: true,
-				defaultValue: 2,
-			},
+		sistema: {
+			type: DataTypes.INTEGER,
+			allowNull: true,
+			defaultValue: 2,
 		},
-		{
-			sequelize,
-			tableName: "grupo",
-			schema: "public",
-			freezeTableName: true,
-			timestamps: false,
+		createdAt: {
+			allowNull: false,
+			type: DataTypes.DATE,
+			defaultValue: DataTypes.literal("CURRENT_TIMESTAMP"),
 		},
+		updatedAt: {
+			allowNull: false,
+			type: DataTypes.DATE,
+			defaultValue: DataTypes.literal("CURRENT_TIMESTAMP"),
+		},
+		deletedAt: {
+			allowNull: true,
+			type: DataTypes.DATE,
+		},
+	},
+	{
+		sequelize,
+		tableName: "grupo",
+		schema: "public",
+		freezeTableName: true,
+		timestamps: true,
+	},
 	);
 
 	Grupo.associate = function (models) {

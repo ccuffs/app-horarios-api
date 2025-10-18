@@ -13,23 +13,37 @@ module.exports = (sequelize, DataTypes) => {
 					key: "id",
 				},
 			},
-			id_usuario: {
-				type: DataTypes.STRING,
-				primaryKey: true,
-				allowNull: false,
-				references: {
-					model: "usuario",
-					key: "id",
-				},
+		id_usuario: {
+			type: DataTypes.STRING,
+			primaryKey: true,
+			allowNull: false,
+			references: {
+				model: "usuario",
+				key: "id",
 			},
 		},
-		{
-			sequelize,
-			tableName: "usuario_curso",
-			schema: "public",
-			freezeTableName: true,
-			timestamps: false,
+		createdAt: {
+			allowNull: false,
+			type: DataTypes.DATE,
+			defaultValue: DataTypes.literal("CURRENT_TIMESTAMP"),
 		},
+		updatedAt: {
+			allowNull: false,
+			type: DataTypes.DATE,
+			defaultValue: DataTypes.literal("CURRENT_TIMESTAMP"),
+		},
+		deletedAt: {
+			allowNull: true,
+			type: DataTypes.DATE,
+		},
+	},
+	{
+		sequelize,
+		tableName: "usuario_curso",
+		schema: "public",
+		freezeTableName: true,
+		timestamps: true,
+	},
 	);
 
 	UsuarioCurso.associate = function (models) {

@@ -13,23 +13,37 @@ module.exports = (sequelize, DataTypes) => {
 					key: "id",
 				},
 			},
-			id_ccr: {
-				type: DataTypes.INTEGER,
-				primaryKey: true,
-				allowNull: false,
-				references: {
-					model: "ccr",
-					key: "id",
-				},
+		id_ccr: {
+			type: DataTypes.INTEGER,
+			primaryKey: true,
+			allowNull: false,
+			references: {
+				model: "ccr",
+				key: "id",
 			},
 		},
-		{
-			sequelize,
-			tableName: "curso_ccr",
-			schema: "public",
-			freezeTableName: true,
-			timestamps: false,
+		createdAt: {
+			allowNull: false,
+			type: DataTypes.DATE,
+			defaultValue: DataTypes.literal("CURRENT_TIMESTAMP"),
 		},
+		updatedAt: {
+			allowNull: false,
+			type: DataTypes.DATE,
+			defaultValue: DataTypes.literal("CURRENT_TIMESTAMP"),
+		},
+		deletedAt: {
+			allowNull: true,
+			type: DataTypes.DATE,
+		},
+	},
+	{
+		sequelize,
+		tableName: "curso_ccr",
+		schema: "public",
+		freezeTableName: true,
+		timestamps: true,
+	},
 	);
 
 	CursoCcr.associate = function (models) {

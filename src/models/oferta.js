@@ -24,19 +24,33 @@ module.exports = (sequelize, DataTypes) => {
 				primaryKey: true,
 				allowNull: false,
 			},
-			turno: {
-				type: DataTypes.STRING,
-				primaryKey: true,
-				allowNull: false,
-			},
+		turno: {
+			type: DataTypes.STRING,
+			primaryKey: true,
+			allowNull: false,
 		},
-		{
-			sequelize,
-			tableName: "oferta",
-			schema: "public",
-			freezeTableName: true,
-			timestamps: false,
+		createdAt: {
+			allowNull: false,
+			type: DataTypes.DATE,
+			defaultValue: DataTypes.literal("CURRENT_TIMESTAMP"),
 		},
+		updatedAt: {
+			allowNull: false,
+			type: DataTypes.DATE,
+			defaultValue: DataTypes.literal("CURRENT_TIMESTAMP"),
+		},
+		deletedAt: {
+			allowNull: true,
+			type: DataTypes.DATE,
+		},
+	},
+	{
+		sequelize,
+		tableName: "oferta",
+		schema: "public",
+		freezeTableName: true,
+		timestamps: true,
+	},
 	);
 
 	Oferta.associate = function (models) {

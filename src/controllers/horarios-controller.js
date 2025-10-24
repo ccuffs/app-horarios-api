@@ -52,6 +52,14 @@ horariosController.post(
 	horariosService.salvaHorariosBulk,
 );
 
+// POST - Sincronizar horários (aplica apenas mudanças necessárias)
+horariosController.post(
+	"/sync",
+	auth.autenticarUsuario,
+	autorizacao.verificarPermissao(Permissoes.HORARIOS.CRIAR),
+	horariosService.sincronizarHorarios,
+);
+
 // GET - Buscar horários de anos/semestres anteriores para importação
 horariosController.get(
 	"/importacao",

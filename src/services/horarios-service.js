@@ -210,6 +210,62 @@ const salvaHorariosBulk = async (req, res) => {
 	}
 };
 
+// Função para sincronizar horários (aplica apenas as mudanças necessárias)
+const sincronizarHorarios = async (req, res) => {
+	try {
+		const { novos, editados, removidos } = req.body;
+
+		if (!Array.isArray(novos) || !Array.isArray(editados) || !Array.isArray(removidos)) {
+			return res.status(400).json({
+				message: "Formato inválido: esperado arrays de novos, editados e removidos.",
+			});
+		}
+
+		let criados = 0;
+		let atualizados = 0;
+		let deletados = 0;
+
+		// 1. Criar novos horários
+		for (const horario of novos) {
+			await horariosRepository.salvarHorario(horario);
+			criados++;
+		}
+
+		// 2. Atualizar horários existentes
+		for (const horario of editados) {
+			const sucesso = await horariosRepository.atualizarHorario(
+				horario.id,
+				horario
+			);
+			if (sucesso) {
+				atualizados++;
+			}
+		}
+
+		// 3. Deletar horários removidos
+		for (const id of removidos) {
+			const sucesso = await horariosRepository.deletarHorario(id);
+			if (sucesso) {
+				deletados++;
+			}
+		}
+
+		res.status(200).json({
+			message: "Sincronização realizada com sucesso",
+			criados,
+			atualizados,
+			deletados,
+			total: criados + atualizados + deletados,
+		});
+	} catch (error) {
+		console.error("Erro ao sincronizar horários:", error);
+		res.status(500).json({
+			message: "Erro ao sincronizar horários",
+			error: error.message,
+		});
+	}
+};
+
 // Função para buscar horários de anos/semestres anteriores para importação
 const retornaHorariosParaImportacao = async (req, res) => {
 	try {
@@ -365,6 +421,7 @@ module.exports = {
 	atualizaHorario,
 	deletaHorario,
 	salvaHorariosBulk,
+	sincronizarHorarios,
 	retornaHorariosParaImportacao,
 	importarHorarios,
 };

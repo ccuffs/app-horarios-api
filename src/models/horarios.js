@@ -4,9 +4,13 @@ module.exports = (sequelize, DataTypes) => {
 	const Horario = sequelize.define(
 		"Horario",
 		{
+			id: {
+				type: DataTypes.STRING,
+				primaryKey: true,
+				allowNull: false,
+			},
 			id_curso: {
 				type: DataTypes.INTEGER,
-				primaryKey: true,
 				allowNull: false,
 				references: {
 					model: "curso",
@@ -15,7 +19,6 @@ module.exports = (sequelize, DataTypes) => {
 			},
 			id_ccr: {
 				type: DataTypes.INTEGER,
-				primaryKey: true,
 				allowNull: false,
 				references: {
 					model: "ccr",
@@ -24,7 +27,6 @@ module.exports = (sequelize, DataTypes) => {
 			},
 			codigo_docente: {
 				type: DataTypes.STRING,
-				primaryKey: true,
 				allowNull: false,
 				references: {
 					model: "docente",
@@ -33,59 +35,51 @@ module.exports = (sequelize, DataTypes) => {
 			},
 			dia_semana: {
 				type: DataTypes.INTEGER,
-				primaryKey: true,
 				allowNull: false,
 			},
 			ano: {
 				type: DataTypes.INTEGER,
-				primaryKey: true,
 				allowNull: false,
 			},
 			semestre: {
 				type: DataTypes.INTEGER,
-				primaryKey: true,
 				allowNull: false,
 			},
 			fase: {
 				type: DataTypes.INTEGER,
-				primaryKey: true,
 				allowNull: false,
 			},
 			hora_inicio: DataTypes.TIME,
 			duracao: DataTypes.INTEGER,
 			comentario: DataTypes.STRING,
-			id: {
-				type: DataTypes.STRING,
+			permitirconflito: {
+				type: DataTypes.BOOLEAN,
 				allowNull: false,
+				defaultValue: false,
 			},
-		permitirconflito: {
-			type: DataTypes.BOOLEAN,
-			allowNull: false,
-			defaultValue: false,
+			createdAt: {
+				allowNull: false,
+				type: DataTypes.DATE,
+				defaultValue: DataTypes.NOW,
+			},
+			updatedAt: {
+				allowNull: false,
+				type: DataTypes.DATE,
+				defaultValue: DataTypes.NOW,
+			},
+			deletedAt: {
+				allowNull: true,
+				type: DataTypes.DATE,
+			},
 		},
-		createdAt: {
-			allowNull: false,
-			type: DataTypes.DATE,
-			defaultValue: DataTypes.NOW,
+		{
+			sequelize,
+			tableName: "horario",
+			schema: "public",
+			freezeTableName: true,
+			timestamps: true,
+			paranoid: true,
 		},
-		updatedAt: {
-			allowNull: false,
-			type: DataTypes.DATE,
-			defaultValue: DataTypes.NOW,
-		},
-		deletedAt: {
-			allowNull: true,
-			type: DataTypes.DATE,
-		},
-	},
-	{
-		sequelize,
-		tableName: "horario",
-		schema: "public",
-		freezeTableName: true,
-		timestamps: true,
-		paranoid: true,
-	},
 	);
 
 	// Definir associações

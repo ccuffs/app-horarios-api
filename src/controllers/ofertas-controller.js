@@ -27,7 +27,7 @@ ofertasController.post(
 
 // PUT - Atualizar oferta existente
 ofertasController.put(
-	"/:ano/:semestre/:id_curso/:fase",
+	"/:ano/:semestre/:id_curso/:fase/:turno",
 	auth.autenticarUsuario,
 	autorizacao.verificarPermissao(Permissoes.OFERTAS_CURSO.EDITAR),
 	ofertasService.atualizaOferta,

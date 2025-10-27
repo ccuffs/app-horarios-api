@@ -111,48 +111,78 @@ const criaOferta = async (req, res) => {
 // Função para atualizar oferta
 const atualizaOferta = async (req, res) => {
 	try {
-		const { ano, semestre, id_curso, fase } = req.params;
-		const { turno } = req.body;
+		const { ano, semestre, id_curso, fase, turno } = req.params;
+		const { turno: novoTurno } = req.body;
 
-		const oferta = await ofertasRepository.obterOfertaPorChave(
-			ano,
-			semestre,
-			id_curso,
-			fase,
-		);
+		// Se o turno não mudou, atualizar normalmente
+		if (turno === novoTurno) {
+			const sucesso = await ofertasRepository.atualizarOferta(
+				parseInt(ano),
+				parseInt(semestre),
+				parseInt(id_curso),
+				parseInt(fase),
+				{ turno: novoTurno },
+			);
 
-		if (!oferta) {
-			return res.status(404).json({
-				message: `Oferta não encontrada para ano=${ano}, semestre=${semestre}, curso=${id_curso}, fase=${fase}`,
-			});
-		}
+			if (sucesso) {
+				const ofertaAtualizada =
+					await ofertasRepository.obterOfertaPorChaveComTurno(
+						parseInt(ano),
+						parseInt(semestre),
+						parseInt(id_curso),
+						parseInt(fase),
+						novoTurno,
+					);
 
-		const sucesso = await ofertasRepository.atualizarOferta(
-			ano,
-			semestre,
-			id_curso,
-			fase,
-			{ turno },
-		);
-
-		if (sucesso) {
-			// Buscar a oferta atualizada
-			const ofertaAtualizada =
-				await ofertasRepository.obterOfertaPorChave(
-					ano,
-					semestre,
-					id_curso,
-					fase,
-				);
-
-			res.status(200).json({
-				message: "Oferta atualizada com sucesso",
-				oferta: ofertaAtualizada,
-			});
+				res.status(200).json({
+					message: "Oferta atualizada com sucesso",
+					oferta: ofertaAtualizada,
+				});
+			} else {
+				res.status(404).json({
+					message: `Oferta não encontrada para ano=${ano}, semestre=${semestre}, curso=${id_curso}, fase=${fase}`,
+				});
+			}
 		} else {
-			res.status(404).json({
-				message: `Oferta não encontrada para ano=${ano}, semestre=${semestre}, curso=${id_curso}, fase=${fase}`,
-			});
+			// Se o turno mudou, usar SQL direto para atualizar a chave primária
+			const sucesso = await ofertasRepository.atualizarTurno(
+				parseInt(ano),
+				parseInt(semestre),
+				parseInt(id_curso),
+				parseInt(fase),
+				turno,
+				novoTurno,
+			);
+
+			if (sucesso) {
+				// Buscar usando SQL direto para evitar problemas de cache
+				const ofertaAtualizada =
+					await ofertasRepository.obterOfertaAtualizadaComTurno(
+						parseInt(ano),
+						parseInt(semestre),
+						parseInt(id_curso),
+						parseInt(fase),
+						novoTurno,
+					);
+
+				if (ofertaAtualizada) {
+					res.status(200).json({
+						message: "Oferta atualizada com sucesso",
+						oferta: ofertaAtualizada,
+					});
+				} else {
+					// Se não encontrou após atualizar, retornar sucesso mesmo assim
+					// pois a atualização foi bem-sucedida
+					res.status(200).json({
+						message: "Oferta atualizada com sucesso",
+						oferta: null,
+					});
+				}
+			} else {
+				res.status(404).json({
+					message: `Oferta não encontrada para ano=${ano}, semestre=${semestre}, curso=${id_curso}, fase=${fase}, turno=${turno}`,
+				});
+			}
 		}
 	} catch (error) {
 		console.error("Erro ao atualizar oferta:", error);

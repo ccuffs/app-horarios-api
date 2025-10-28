@@ -9,32 +9,32 @@ module.exports = (sequelize, DataTypes) => {
 				primaryKey: true,
 				autoIncrement: true,
 			},
-		codigo: DataTypes.INTEGER,
-		nome: DataTypes.TEXT,
-		turno: DataTypes.TEXT,
-		createdAt: {
-			allowNull: false,
-			type: DataTypes.DATE,
-			defaultValue: DataTypes.NOW,
+			codigo: DataTypes.INTEGER,
+			nome: DataTypes.TEXT,
+			turno: DataTypes.TEXT,
+			createdAt: {
+				allowNull: false,
+				type: DataTypes.DATE,
+				defaultValue: DataTypes.NOW,
+			},
+			updatedAt: {
+				allowNull: false,
+				type: DataTypes.DATE,
+				defaultValue: DataTypes.NOW,
+			},
+			deletedAt: {
+				allowNull: true,
+				type: DataTypes.DATE,
+			},
 		},
-		updatedAt: {
-			allowNull: false,
-			type: DataTypes.DATE,
-			defaultValue: DataTypes.NOW,
+		{
+			sequelize,
+			tableName: "curso",
+			schema: "public",
+			freezeTableName: true,
+			timestamps: true,
+			paranoid: true,
 		},
-		deletedAt: {
-			allowNull: true,
-			type: DataTypes.DATE,
-		},
-	},
-	{
-		sequelize,
-		tableName: "curso",
-		schema: "public",
-		freezeTableName: true,
-		timestamps: true,
-		paranoid: true,
-	},
 	);
 
 	Curso.associate = function (models) {

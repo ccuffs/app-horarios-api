@@ -42,4 +42,3 @@ cursosResource.delete(
 );
 
 module.exports = cursosResource;
-

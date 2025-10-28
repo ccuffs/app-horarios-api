@@ -30,4 +30,3 @@ publicResource.get("/ofertas", ofertasService.retornaOfertas);
 publicResource.get("/horarios", horariosService.retornaHorarios);
 
 module.exports = publicResource;
-

@@ -19,35 +19,35 @@ module.exports = (sequelize, DataTypes) => {
 				type: DataTypes.STRING,
 				allowNull: false,
 			},
-		creditos: {
-			type: DataTypes.INTEGER,
-			allowNull: false,
-			defaultValue: 4,
+			creditos: {
+				type: DataTypes.INTEGER,
+				allowNull: false,
+				defaultValue: 4,
+			},
+			ementa: DataTypes.STRING,
+			createdAt: {
+				allowNull: false,
+				type: DataTypes.DATE,
+				defaultValue: DataTypes.NOW,
+			},
+			updatedAt: {
+				allowNull: false,
+				type: DataTypes.DATE,
+				defaultValue: DataTypes.NOW,
+			},
+			deletedAt: {
+				allowNull: true,
+				type: DataTypes.DATE,
+			},
 		},
-		ementa: DataTypes.STRING,
-		createdAt: {
-			allowNull: false,
-			type: DataTypes.DATE,
-			defaultValue: DataTypes.NOW,
+		{
+			sequelize,
+			tableName: "ccr",
+			schema: "public",
+			freezeTableName: true,
+			timestamps: true,
+			paranoid: true,
 		},
-		updatedAt: {
-			allowNull: false,
-			type: DataTypes.DATE,
-			defaultValue: DataTypes.NOW,
-		},
-		deletedAt: {
-			allowNull: true,
-			type: DataTypes.DATE,
-		},
-	},
-	{
-		sequelize,
-		tableName: "ccr",
-		schema: "public",
-		freezeTableName: true,
-		timestamps: true,
-		paranoid: true,
-	},
 	);
 
 	CCR.associate = function (models) {

@@ -61,4 +61,3 @@ anoSemestreResource.patch(
 );
 
 module.exports = anoSemestreResource;
-

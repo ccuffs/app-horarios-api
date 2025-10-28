@@ -13,38 +13,38 @@ module.exports = (sequelize, DataTypes) => {
 					key: "id",
 				},
 			},
-		codigo_docente: {
-			type: DataTypes.STRING,
-			primaryKey: true,
-			allowNull: false,
-			references: {
-				model: "docente",
-				key: "codigo",
+			codigo_docente: {
+				type: DataTypes.STRING,
+				primaryKey: true,
+				allowNull: false,
+				references: {
+					model: "docente",
+					key: "codigo",
+				},
+			},
+			createdAt: {
+				allowNull: false,
+				type: DataTypes.DATE,
+				defaultValue: DataTypes.NOW,
+			},
+			updatedAt: {
+				allowNull: false,
+				type: DataTypes.DATE,
+				defaultValue: DataTypes.NOW,
+			},
+			deletedAt: {
+				allowNull: true,
+				type: DataTypes.DATE,
 			},
 		},
-		createdAt: {
-			allowNull: false,
-			type: DataTypes.DATE,
-			defaultValue: DataTypes.NOW,
+		{
+			sequelize,
+			tableName: "docente_curso",
+			schema: "public",
+			freezeTableName: true,
+			timestamps: true,
+			paranoid: true,
 		},
-		updatedAt: {
-			allowNull: false,
-			type: DataTypes.DATE,
-			defaultValue: DataTypes.NOW,
-		},
-		deletedAt: {
-			allowNull: true,
-			type: DataTypes.DATE,
-		},
-	},
-	{
-		sequelize,
-		tableName: "docente_curso",
-		schema: "public",
-		freezeTableName: true,
-		timestamps: true,
-		paranoid: true,
-	},
 	);
 
 	DocenteCurso.associate = function (models) {

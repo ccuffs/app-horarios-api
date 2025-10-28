@@ -77,4 +77,3 @@ horariosResource.post(
 );
 
 module.exports = horariosResource;
-

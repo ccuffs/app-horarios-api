@@ -26,11 +26,7 @@ usuariosResource.get(
 );
 
 // POST - Criar novo usuário
-usuariosResource.post(
-	"/",
-	auth.autenticarUsuario,
-	usuariosService.criaUsuario,
-);
+usuariosResource.post("/", auth.autenticarUsuario, usuariosService.criaUsuario);
 
 // PUT - Atualizar usuário existente
 usuariosResource.put(
@@ -47,4 +43,3 @@ usuariosResource.delete(
 );
 
 module.exports = usuariosResource;
-

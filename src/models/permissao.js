@@ -14,37 +14,37 @@ module.exports = (sequelize, DataTypes) => {
 				allowNull: false,
 			},
 			descricao: DataTypes.STRING,
-		codigo_categoria_permissao: {
-			type: DataTypes.STRING,
-			allowNull: false,
-			references: {
-				model: "categoria_permissao",
-				key: "codigo",
+			codigo_categoria_permissao: {
+				type: DataTypes.STRING,
+				allowNull: false,
+				references: {
+					model: "categoria_permissao",
+					key: "codigo",
+				},
+			},
+			createdAt: {
+				allowNull: false,
+				type: DataTypes.DATE,
+				defaultValue: DataTypes.NOW,
+			},
+			updatedAt: {
+				allowNull: false,
+				type: DataTypes.DATE,
+				defaultValue: DataTypes.NOW,
+			},
+			deletedAt: {
+				allowNull: true,
+				type: DataTypes.DATE,
 			},
 		},
-		createdAt: {
-			allowNull: false,
-			type: DataTypes.DATE,
-			defaultValue: DataTypes.NOW,
+		{
+			sequelize,
+			tableName: "permissao",
+			schema: "public",
+			freezeTableName: true,
+			timestamps: true,
+			paranoid: true,
 		},
-		updatedAt: {
-			allowNull: false,
-			type: DataTypes.DATE,
-			defaultValue: DataTypes.NOW,
-		},
-		deletedAt: {
-			allowNull: true,
-			type: DataTypes.DATE,
-		},
-	},
-	{
-		sequelize,
-		tableName: "permissao",
-		schema: "public",
-		freezeTableName: true,
-		timestamps: true,
-		paranoid: true,
-	},
 	);
 
 	Permissao.associate = function (models) {

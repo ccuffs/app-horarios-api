@@ -172,4 +172,3 @@ authResource.post("/logout", auth.autenticarUsuario, logout);
 authResource.post("/validate", validateToken);
 
 module.exports = authResource;
-

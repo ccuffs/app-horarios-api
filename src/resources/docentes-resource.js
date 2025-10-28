@@ -42,4 +42,3 @@ docentesResource.delete(
 );
 
 module.exports = docentesResource;
-

@@ -50,4 +50,3 @@ ofertasResource.post(
 );
 
 module.exports = ofertasResource;
-

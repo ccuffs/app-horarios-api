@@ -215,9 +215,14 @@ const sincronizarHorarios = async (req, res) => {
 	try {
 		const { novos, editados, removidos } = req.body;
 
-		if (!Array.isArray(novos) || !Array.isArray(editados) || !Array.isArray(removidos)) {
+		if (
+			!Array.isArray(novos) ||
+			!Array.isArray(editados) ||
+			!Array.isArray(removidos)
+		) {
 			return res.status(400).json({
-				message: "Formato inválido: esperado arrays de novos, editados e removidos.",
+				message:
+					"Formato inválido: esperado arrays de novos, editados e removidos.",
 			});
 		}
 
@@ -235,7 +240,7 @@ const sincronizarHorarios = async (req, res) => {
 		for (const horario of editados) {
 			const sucesso = await horariosRepository.atualizarHorario(
 				horario.id,
-				horario
+				horario,
 			);
 			if (sucesso) {
 				atualizados++;
@@ -274,7 +279,8 @@ const retornaHorariosParaImportacao = async (req, res) => {
 		// Validar parâmetros obrigatórios
 		if (!ano_origem || !semestre_origem || !id_curso) {
 			return res.status(400).json({
-				message: "Parâmetros obrigatórios: ano_origem, semestre_origem, id_curso",
+				message:
+					"Parâmetros obrigatórios: ano_origem, semestre_origem, id_curso",
 			});
 		}
 
@@ -293,7 +299,8 @@ const retornaHorariosParaImportacao = async (req, res) => {
 	} catch (error) {
 		console.error("Erro ao buscar horários para importação:", error);
 		res.status(500).json({
-			message: "Erro interno do servidor ao buscar horários para importação",
+			message:
+				"Erro interno do servidor ao buscar horários para importação",
 			error: error.message,
 		});
 	}
@@ -305,13 +312,28 @@ const importarHorarios = async (req, res) => {
 	const transaction = await model.sequelize.transaction();
 
 	try {
-		const { ano_origem, semestre_origem, ano_destino, semestre_destino, id_curso, incluir_docentes, incluir_ofertas } = req.body;
+		const {
+			ano_origem,
+			semestre_origem,
+			ano_destino,
+			semestre_destino,
+			id_curso,
+			incluir_docentes,
+			incluir_ofertas,
+		} = req.body;
 
 		// Validar parâmetros obrigatórios
-		if (!ano_origem || !semestre_origem || !ano_destino || !semestre_destino || !id_curso) {
+		if (
+			!ano_origem ||
+			!semestre_origem ||
+			!ano_destino ||
+			!semestre_destino ||
+			!id_curso
+		) {
 			await transaction.rollback();
 			return res.status(400).json({
-				message: "Parâmetros obrigatórios: ano_origem, semestre_origem, ano_destino, semestre_destino, id_curso",
+				message:
+					"Parâmetros obrigatórios: ano_origem, semestre_origem, ano_destino, semestre_destino, id_curso",
 			});
 		}
 
@@ -376,7 +398,7 @@ const importarHorarios = async (req, res) => {
 
 			if (ofertasOrigem.length > 0) {
 				// Preparar ofertas para importação
-				const ofertasParaImportar = ofertasOrigem.map(oferta => ({
+				const ofertasParaImportar = ofertasOrigem.map((oferta) => ({
 					ano: parseInt(ano_destino),
 					semestre: parseInt(semestre_destino),
 					id_curso: parseInt(id_curso),
@@ -409,7 +431,8 @@ const importarHorarios = async (req, res) => {
 
 		console.error("Erro ao importar horários:", error);
 		res.status(500).json({
-			message: "Erro interno do servidor ao importar horários. Todas as alterações foram desfeitas.",
+			message:
+				"Erro interno do servidor ao importar horários. Todas as alterações foram desfeitas.",
 			error: error.message,
 		});
 	}

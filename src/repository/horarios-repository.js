@@ -77,9 +77,9 @@ horariosRepository.salvarHorario = async (dadosHorario) => {
 		const horarioExistente = await model.Horario.findOne({
 			where: {
 				id: dadosHorario.id,
-				deletedAt: { [Op.ne]: null }
+				deletedAt: { [Op.ne]: null },
 			},
-			paranoid: false // Incluir registros soft-deleted
+			paranoid: false, // Incluir registros soft-deleted
 		});
 
 		if (horarioExistente && horarioExistente.deletedAt) {
@@ -91,8 +91,8 @@ horariosRepository.salvarHorario = async (dadosHorario) => {
 				},
 				{
 					where: { id: dadosHorario.id },
-					paranoid: false
-				}
+					paranoid: false,
+				},
 			);
 
 			if (linhasAfetadas > 0) {

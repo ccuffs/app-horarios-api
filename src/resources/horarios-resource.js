@@ -4,10 +4,10 @@ const { auth } = require("../middleware/auth");
 const { autorizacao } = require("../middleware/autorizacao");
 const { Permissoes } = require("../enums/permissoes");
 
-const horariosController = express.Router();
+const horariosResource = express.Router();
 
 // GET - Buscar horários
-horariosController.get(
+horariosResource.get(
 	"/",
 	auth.autenticarUsuario,
 	autorizacao.verificarPermissao([
@@ -18,7 +18,7 @@ horariosController.get(
 );
 
 // GET - Buscar horário específico por ID
-horariosController.get(
+horariosResource.get(
 	"/:id",
 	auth.autenticarUsuario,
 	autorizacao.verificarPermissao([
@@ -29,7 +29,7 @@ horariosController.get(
 );
 
 // PUT - Atualizar horário específico
-horariosController.put(
+horariosResource.put(
 	"/:id",
 	auth.autenticarUsuario,
 	autorizacao.verificarPermissao(Permissoes.HORARIOS.EDITAR),
@@ -37,7 +37,7 @@ horariosController.put(
 );
 
 // DELETE - Remover horário específico
-horariosController.delete(
+horariosResource.delete(
 	"/:id",
 	auth.autenticarUsuario,
 	autorizacao.verificarPermissao(Permissoes.HORARIOS.DELETAR),
@@ -45,7 +45,7 @@ horariosController.delete(
 );
 
 // POST - Criar/atualizar múltiplos horários em bulk
-horariosController.post(
+horariosResource.post(
 	"/bulk",
 	auth.autenticarUsuario,
 	autorizacao.verificarPermissao(Permissoes.HORARIOS.CRIAR),
@@ -53,7 +53,7 @@ horariosController.post(
 );
 
 // POST - Sincronizar horários (aplica apenas mudanças necessárias)
-horariosController.post(
+horariosResource.post(
 	"/sync",
 	auth.autenticarUsuario,
 	autorizacao.verificarPermissao(Permissoes.HORARIOS.CRIAR),
@@ -61,7 +61,7 @@ horariosController.post(
 );
 
 // GET - Buscar horários de anos/semestres anteriores para importação
-horariosController.get(
+horariosResource.get(
 	"/importacao",
 	auth.autenticarUsuario,
 	autorizacao.verificarPermissao(Permissoes.HORARIOS.CRIAR),
@@ -69,11 +69,12 @@ horariosController.get(
 );
 
 // POST - Importar horários de ano/semestre anterior
-horariosController.post(
+horariosResource.post(
 	"/importar",
 	auth.autenticarUsuario,
 	autorizacao.verificarPermissao(Permissoes.HORARIOS.CRIAR),
 	horariosService.importarHorarios,
 );
 
-module.exports = horariosController;
+module.exports = horariosResource;
+

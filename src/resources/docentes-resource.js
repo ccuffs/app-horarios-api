@@ -4,10 +4,10 @@ const { auth } = require("../middleware/auth");
 const { autorizacao } = require("../middleware/autorizacao");
 const { Permissoes } = require("../enums/permissoes");
 
-const docentesController = express.Router();
+const docentesResource = express.Router();
 
 // GET - Buscar todos os docentes
-docentesController.get(
+docentesResource.get(
 	"/",
 	auth.autenticarUsuario,
 	autorizacao.verificarPermissao([
@@ -18,7 +18,7 @@ docentesController.get(
 );
 
 // POST - Criar novo docente
-docentesController.post(
+docentesResource.post(
 	"/",
 	auth.autenticarUsuario,
 	autorizacao.verificarPermissao(Permissoes.DOCENTES.CRIAR),
@@ -26,7 +26,7 @@ docentesController.post(
 );
 
 // PUT - Atualizar docente existente
-docentesController.put(
+docentesResource.put(
 	"/",
 	auth.autenticarUsuario,
 	autorizacao.verificarPermissao(Permissoes.DOCENTES.EDITAR),
@@ -34,11 +34,12 @@ docentesController.put(
 );
 
 // DELETE - Remover docente
-docentesController.delete(
+docentesResource.delete(
 	"/:codigo",
 	auth.autenticarUsuario,
 	autorizacao.verificarPermissao(Permissoes.DOCENTES.DELETAR),
 	docentesService.deletaDocente,
 );
 
-module.exports = docentesController;
+module.exports = docentesResource;
+

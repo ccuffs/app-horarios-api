@@ -6,27 +6,28 @@ const ccrsService = require("../services/ccrs-service");
 const ofertasService = require("../services/ofertas-service");
 const horariosService = require("../services/horarios-service");
 
-const publicController = express.Router();
+const publicResource = express.Router();
 
 // GET - Buscar cursos (público)
-publicController.get("/cursos", cursosService.retornaTodosCursos);
+publicResource.get("/cursos", cursosService.retornaTodosCursos);
 
 // GET - Buscar anos/semestres (público)
-publicController.get(
+publicResource.get(
 	"/ano-semestre",
 	anoSemestreService.retornaTodosAnosSemestres,
 );
 
 // GET - Buscar docentes (público)
-publicController.get("/docentes", docentesService.retornaTodosDocentes);
+publicResource.get("/docentes", docentesService.retornaTodosDocentes);
 
 // GET - Buscar CCRs (público)
-publicController.get("/ccrs", ccrsService.retornaTodosCCRs);
+publicResource.get("/ccrs", ccrsService.retornaTodosCCRs);
 
 // GET - Buscar ofertas (público)
-publicController.get("/ofertas", ofertasService.retornaOfertas);
+publicResource.get("/ofertas", ofertasService.retornaOfertas);
 
 // GET - Buscar horários (apenas publicados)
-publicController.get("/horarios", horariosService.retornaHorarios);
+publicResource.get("/horarios", horariosService.retornaHorarios);
 
-module.exports = publicController;
+module.exports = publicResource;
+

@@ -2,48 +2,49 @@ const express = require("express");
 const usuariosService = require("../services/usuarios-service");
 const { auth } = require("../middleware/auth");
 
-const usuariosController = express.Router();
+const usuariosResource = express.Router();
 
 // GET - Buscar todos os usuários
-usuariosController.get(
+usuariosResource.get(
 	"/",
 	auth.autenticarUsuario,
 	usuariosService.retornaTodosUsuarios,
 );
 
 // GET - Buscar cursos vinculados ao usuário (deve vir antes da rota /:userId)
-usuariosController.get(
+usuariosResource.get(
 	"/:userId/cursos",
 	auth.autenticarUsuario,
 	usuariosService.retornaCursosDoUsuario,
 );
 
 // GET - Buscar usuário específico
-usuariosController.get(
+usuariosResource.get(
 	"/:userId",
 	auth.autenticarUsuario,
 	usuariosService.retornaUsuarioPorId,
 );
 
 // POST - Criar novo usuário
-usuariosController.post(
+usuariosResource.post(
 	"/",
 	auth.autenticarUsuario,
 	usuariosService.criaUsuario,
 );
 
 // PUT - Atualizar usuário existente
-usuariosController.put(
+usuariosResource.put(
 	"/",
 	auth.autenticarUsuario,
 	usuariosService.atualizaUsuario,
 );
 
 // DELETE - Remover usuário
-usuariosController.delete(
+usuariosResource.delete(
 	"/:id",
 	auth.autenticarUsuario,
 	usuariosService.deletaUsuario,
 );
 
-module.exports = usuariosController;
+module.exports = usuariosResource;
+

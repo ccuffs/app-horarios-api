@@ -4,10 +4,10 @@ const { auth } = require("../middleware/auth");
 const { autorizacao } = require("../middleware/autorizacao");
 const { Permissoes } = require("../enums/permissoes");
 
-const cursosController = express.Router();
+const cursosResource = express.Router();
 
 // GET - Buscar todos os cursos
-cursosController.get(
+cursosResource.get(
 	"/",
 	auth.autenticarUsuario,
 	autorizacao.verificarPermissao([
@@ -18,7 +18,7 @@ cursosController.get(
 );
 
 // POST - Criar novo curso
-cursosController.post(
+cursosResource.post(
 	"/",
 	auth.autenticarUsuario,
 	autorizacao.verificarPermissao(Permissoes.OFERTAS_CURSO.CRIAR),
@@ -26,7 +26,7 @@ cursosController.post(
 );
 
 // PUT - Atualizar curso existente
-cursosController.put(
+cursosResource.put(
 	"/",
 	auth.autenticarUsuario,
 	autorizacao.verificarPermissao(Permissoes.OFERTAS_CURSO.EDITAR),
@@ -34,11 +34,12 @@ cursosController.put(
 );
 
 // DELETE - Remover curso
-cursosController.delete(
+cursosResource.delete(
 	"/:id",
 	auth.autenticarUsuario,
 	autorizacao.verificarPermissao(Permissoes.OFERTAS_CURSO.DELETAR),
 	cursosService.deletaCurso,
 );
 
-module.exports = cursosController;
+module.exports = cursosResource;
+

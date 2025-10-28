@@ -4,10 +4,10 @@ const { auth } = require("../middleware/auth");
 const { autorizacao } = require("../middleware/autorizacao");
 const { Permissoes } = require("../enums/permissoes");
 
-const ccrsController = express.Router();
+const ccrsResource = express.Router();
 
 // GET - Buscar todos os CCRs
-ccrsController.get(
+ccrsResource.get(
 	"/",
 	auth.autenticarUsuario,
 	autorizacao.verificarPermissao([
@@ -18,7 +18,7 @@ ccrsController.get(
 );
 
 // POST - Criar novo CCR
-ccrsController.post(
+ccrsResource.post(
 	"/",
 	auth.autenticarUsuario,
 	autorizacao.verificarPermissao(Permissoes.CCR.CRIAR),
@@ -26,7 +26,7 @@ ccrsController.post(
 );
 
 // PUT - Atualizar CCR existente
-ccrsController.put(
+ccrsResource.put(
 	"/",
 	auth.autenticarUsuario,
 	autorizacao.verificarPermissao(Permissoes.CCR.EDITAR),
@@ -34,11 +34,12 @@ ccrsController.put(
 );
 
 // DELETE - Remover CCR
-ccrsController.delete(
+ccrsResource.delete(
 	"/:id",
 	auth.autenticarUsuario,
 	autorizacao.verificarPermissao(Permissoes.CCR.DELETAR),
 	ccrsService.deletaCCR,
 );
 
-module.exports = ccrsController;
+module.exports = ccrsResource;
+

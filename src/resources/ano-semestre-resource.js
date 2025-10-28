@@ -4,10 +4,10 @@ const { auth } = require("../middleware/auth");
 const { autorizacao } = require("../middleware/autorizacao");
 const { Permissoes } = require("../enums/permissoes");
 
-const anoSemestreController = express.Router();
+const anoSemestreResource = express.Router();
 
 // GET - Buscar todos os anos/semestres cadastrados
-anoSemestreController.get(
+anoSemestreResource.get(
 	"/",
 	auth.autenticarUsuario,
 	autorizacao.verificarPermissao([
@@ -18,7 +18,7 @@ anoSemestreController.get(
 );
 
 // POST - Criar novo ano/semestre
-anoSemestreController.post(
+anoSemestreResource.post(
 	"/",
 	auth.autenticarUsuario,
 	autorizacao.verificarPermissao(Permissoes.HORARIOS.CRIAR),
@@ -26,7 +26,7 @@ anoSemestreController.post(
 );
 
 // PUT - Atualizar ano/semestre existente
-anoSemestreController.put(
+anoSemestreResource.put(
 	"/:ano/:semestre",
 	auth.autenticarUsuario,
 	autorizacao.verificarPermissao(Permissoes.HORARIOS.EDITAR),
@@ -34,7 +34,7 @@ anoSemestreController.put(
 );
 
 // DELETE - Remover ano/semestre
-anoSemestreController.delete(
+anoSemestreResource.delete(
 	"/:ano/:semestre",
 	auth.autenticarUsuario,
 	autorizacao.verificarPermissao(Permissoes.HORARIOS.DELETAR),
@@ -42,7 +42,7 @@ anoSemestreController.delete(
 );
 
 // GET - Buscar status de publicação de um ano/semestre específico
-anoSemestreController.get(
+anoSemestreResource.get(
 	"/:ano/:semestre/publicacao",
 	auth.autenticarUsuario,
 	autorizacao.verificarPermissao([
@@ -53,11 +53,12 @@ anoSemestreController.get(
 );
 
 // PATCH - Alterar status de publicação do ano/semestre
-anoSemestreController.patch(
+anoSemestreResource.patch(
 	"/:ano/:semestre/publicacao",
 	auth.autenticarUsuario,
 	autorizacao.verificarPermissao(Permissoes.HORARIOS.EDITAR),
 	anoSemestreService.atualizaStatusPublicacao,
 );
 
-module.exports = anoSemestreController;
+module.exports = anoSemestreResource;
+

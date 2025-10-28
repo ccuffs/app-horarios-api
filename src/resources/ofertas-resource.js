@@ -4,10 +4,10 @@ const { auth } = require("../middleware/auth");
 const { autorizacao } = require("../middleware/autorizacao");
 const { Permissoes } = require("../enums/permissoes");
 
-const ofertasController = express.Router();
+const ofertasResource = express.Router();
 
 // GET - Buscar todas as ofertas ou filtrar por parâmetros
-ofertasController.get(
+ofertasResource.get(
 	"/",
 	auth.autenticarUsuario,
 	autorizacao.verificarPermissao([
@@ -18,7 +18,7 @@ ofertasController.get(
 );
 
 // POST - Criar nova oferta
-ofertasController.post(
+ofertasResource.post(
 	"/",
 	auth.autenticarUsuario,
 	autorizacao.verificarPermissao(Permissoes.OFERTAS_CURSO.CRIAR),
@@ -26,7 +26,7 @@ ofertasController.post(
 );
 
 // PUT - Atualizar oferta existente
-ofertasController.put(
+ofertasResource.put(
 	"/:ano/:semestre/:id_curso/:fase/:turno",
 	auth.autenticarUsuario,
 	autorizacao.verificarPermissao(Permissoes.OFERTAS_CURSO.EDITAR),
@@ -34,7 +34,7 @@ ofertasController.put(
 );
 
 // DELETE - Remover oferta
-ofertasController.delete(
+ofertasResource.delete(
 	"/:ano/:semestre/:id_curso/:fase",
 	auth.autenticarUsuario,
 	autorizacao.verificarPermissao(Permissoes.OFERTAS_CURSO.DELETAR),
@@ -42,11 +42,12 @@ ofertasController.delete(
 );
 
 // POST - Criar múltiplas ofertas em bulk
-ofertasController.post(
+ofertasResource.post(
 	"/bulk",
 	auth.autenticarUsuario,
 	autorizacao.verificarPermissao(Permissoes.OFERTAS_CURSO.CRIAR),
 	ofertasService.salvaOfertasBulk,
 );
 
-module.exports = ofertasController;
+module.exports = ofertasResource;
+

@@ -10,15 +10,15 @@ const port = process.env.SERVERPORT || 3010;
 
 const app = express();
 const { passport } = require("./src/middleware/auth");
-const docentesController = require("./src/controllers/docentes-controller");
-const cursosController = require("./src/controllers/cursos-controller");
-const ccrsController = require("./src/controllers/ccrs-controller");
-const horariosController = require("./src/controllers/horarios-controller");
-const anoSemestreController = require("./src/controllers/ano-semestre-controller");
-const ofertasController = require("./src/controllers/ofertas-controller");
-const usuariosController = require("./src/controllers/usuarios-controller");
-const authController = require("./src/controllers/auth-controller");
-const publicController = require("./src/controllers/public-controller");
+const docentesResource = require("./src/resources/docentes-resource");
+const cursosResource = require("./src/resources/cursos-resource");
+const ccrsResource = require("./src/resources/ccrs-resource");
+const horariosResource = require("./src/resources/horarios-resource");
+const anoSemestreResource = require("./src/resources/ano-semestre-resource");
+const ofertasResource = require("./src/resources/ofertas-resource");
+const usuariosResource = require("./src/resources/usuarios-resource");
+const authResource = require("./src/resources/auth-resource");
+const publicResource = require("./src/resources/public-resource");
 
 app.use(cors());
 app.use(express.json());
@@ -34,14 +34,14 @@ app.get("/", (req, res) => {
 });
 
 // Rotas públicas (sem autenticação)
-app.use("/api/public", publicController);
+app.use("/api/public", publicResource);
 
 // Rotas protegidas (com autenticação)
-app.use("/api/ccrs", ccrsController);
-app.use("/api/cursos", cursosController);
-app.use("/api/docentes", docentesController);
-app.use("/api/horarios", horariosController);
-app.use("/api/ano-semestre", anoSemestreController);
-app.use("/api/ofertas", ofertasController);
-app.use("/api/usuarios", usuariosController);
-app.use("/api/auth", authController);
+app.use("/api/ccrs", ccrsResource);
+app.use("/api/cursos", cursosResource);
+app.use("/api/docentes", docentesResource);
+app.use("/api/horarios", horariosResource);
+app.use("/api/ano-semestre", anoSemestreResource);
+app.use("/api/ofertas", ofertasResource);
+app.use("/api/usuarios", usuariosResource);
+app.use("/api/auth", authResource);

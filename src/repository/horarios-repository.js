@@ -2,6 +2,24 @@ const model = require("@backend/models");
 const { Op } = require("sequelize");
 const horariosRepository = {};
 
+const prepareHorarioPayload = (dados = {}) => {
+	if (dados === null || typeof dados !== "object") {
+		return dados;
+	}
+
+	const payload = { ...dados };
+
+	if (
+		Object.prototype.hasOwnProperty.call(payload, "permitirConflito") &&
+		!Object.prototype.hasOwnProperty.call(payload, "permitirconflito")
+	) {
+		payload.permitirconflito = payload.permitirConflito;
+		delete payload.permitirConflito;
+	}
+
+	return payload;
+};
+
 // Buscar horários com filtros
 horariosRepository.obterHorarios = async (ano, semestre, id_curso) => {
 	const horarios = await model.Horario.findAll({
@@ -44,7 +62,8 @@ horariosRepository.obterHorarioPorId = async (id) => {
 
 // Atualizar horário
 horariosRepository.atualizarHorario = async (id, dadosAtualizacao) => {
-	const [linhasAfetadas] = await model.Horario.update(dadosAtualizacao, {
+	const payload = prepareHorarioPayload(dadosAtualizacao);
+	const [linhasAfetadas] = await model.Horario.update(payload, {
 		where: { id },
 	});
 	return linhasAfetadas > 0;
@@ -73,10 +92,12 @@ horariosRepository.obterHorariosExistentes = async (
 // Salvar horário (upsert) - reativa registros soft-deleted
 horariosRepository.salvarHorario = async (dadosHorario) => {
 	try {
+		const payload = prepareHorarioPayload(dadosHorario);
+
 		// Verificar se existe um registro com o mesmo ID mas soft-deleted
 		const horarioExistente = await model.Horario.findOne({
 			where: {
-				id: dadosHorario.id,
+				id: payload.id,
 				deletedAt: { [Op.ne]: null },
 			},
 			paranoid: false, // Incluir registros soft-deleted
@@ -86,22 +107,22 @@ horariosRepository.salvarHorario = async (dadosHorario) => {
 			// Reativar o registro existente definindo deletedAt como null
 			const [linhasAfetadas] = await model.Horario.update(
 				{
-					...dadosHorario,
+					...payload,
 					deletedAt: null,
 				},
 				{
-					where: { id: dadosHorario.id },
+					where: { id: payload.id },
 					paranoid: false,
 				},
 			);
 
 			if (linhasAfetadas > 0) {
-				return [await model.Horario.findByPk(dadosHorario.id), true];
+				return [await model.Horario.findByPk(payload.id), true];
 			}
 		}
 
 		// Se não existe registro deletado, usar upsert normal
-		const horario = await model.Horario.upsert(dadosHorario);
+		const horario = await model.Horario.upsert(payload);
 		return horario;
 	} catch (error) {
 		console.error("Erro ao salvar horário:", error);

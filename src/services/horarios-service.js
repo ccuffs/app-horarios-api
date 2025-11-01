@@ -2,6 +2,30 @@ const horariosRepository = require("../repository/horarios-repository");
 const ofertasRepository = require("../repository/ofertas-repository");
 const model = require("../models");
 
+const mapHorarioResponse = (horario) => {
+	if (!horario) {
+		return horario;
+	}
+
+	const plain =
+		typeof horario.toJSON === "function"
+			? horario.toJSON()
+			: { ...horario };
+
+	if (
+		plain.permitirConflito === undefined &&
+		Object.prototype.hasOwnProperty.call(plain, "permitirconflito")
+	) {
+		plain.permitirConflito = plain.permitirconflito;
+	}
+
+	if (Object.prototype.hasOwnProperty.call(plain, "permitirconflito")) {
+		delete plain.permitirconflito;
+	}
+
+	return plain;
+};
+
 // Função para retornar horários
 const retornaHorarios = async (req, res) => {
 	try {
@@ -37,11 +61,12 @@ const retornaHorarios = async (req, res) => {
 			semestre,
 			id_curso,
 		);
+		const horariosNormalizados = horarios.map(mapHorarioResponse);
 
 		res.status(200).json({
 			message: "Horários encontrados com sucesso",
-			horarios: horarios,
-			count: horarios.length,
+			horarios: horariosNormalizados,
+			count: horariosNormalizados.length,
 		});
 	} catch (error) {
 		console.error("Erro ao buscar horários:", error);
@@ -67,7 +92,7 @@ const retornaHorarioPorId = async (req, res) => {
 
 		res.status(200).json({
 			message: "Horário encontrado com sucesso",
-			horario: horario,
+			horario: mapHorarioResponse(horario),
 		});
 	} catch (error) {
 		console.error("Erro ao buscar horário por ID:", error);
@@ -106,7 +131,7 @@ const atualizaHorario = async (req, res) => {
 
 			res.status(200).json({
 				message: "Horário atualizado com sucesso",
-				horario: horarioAtualizado,
+				horario: mapHorarioResponse(horarioAtualizado),
 			});
 		} else {
 			res.status(404).json({
@@ -290,11 +315,12 @@ const retornaHorariosParaImportacao = async (req, res) => {
 			semestre_origem,
 			id_curso,
 		);
+		const horariosNormalizados = horarios.map(mapHorarioResponse);
 
 		res.status(200).json({
 			message: "Horários para importação encontrados com sucesso",
-			horarios: horarios,
-			count: horarios.length,
+			horarios: horariosNormalizados,
+			count: horariosNormalizados.length,
 		});
 	} catch (error) {
 		console.error("Erro ao buscar horários para importação:", error);

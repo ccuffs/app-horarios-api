@@ -35,6 +35,7 @@ O App Horários API é o backend do sistema de gerenciamento de horários acadê
 ### Autenticação e Segurança
 - **[Passport.js](http://www.passportjs.org/)** - Middleware de autenticação
 - **[Passport-JWT](https://github.com/mikenicholson/passport-jwt)** - Estratégia JWT para Passport
+- **[Passport-LDAPAUTH](https://github.com/vesse/passport-ldapauth)** - Estratégia LDAP para Passport
 - **[Helmet](https://helmetjs.github.io/)** - Proteção de headers HTTP
 - **[CORS](https://github.com/expressjs/cors)** - Controle de acesso entre origens
 
@@ -154,12 +155,28 @@ psql -U postgres -d app_horarios -f dados-teste.sql
 4. Configure as variáveis de ambiente:
 Crie um arquivo `.env` na raiz do projeto:
 ```env
+# Configurações do Servidor
+SERVERPORT=3010
+
+# Configurações JWT
+JWT_SECRET=sua-chave-secreta-muito-segura
+
 # Banco de Dados
 DBHOST=endereco_postgres
 DBPORT=porta_postgres
 DBNAME=nome_banco
 DBUSER=usuario_banco
 DBPASS=sua_senha
+
+# Configurações do LDAP
+# Habilitar/desabilitar autenticação LDAP (true/false)
+# Se false, permite login sem senha (apenas para desenvolvimento)
+LDAP_ENABLED=true
+LDAP_URL=ldap://ldap.example.com:389
+LDAP_BIND_DN=cn=admin,dc=example,dc=com
+LDAP_BIND_CREDENTIALS=admin_password
+LDAP_SEARCH_BASE=ou=users,dc=example,dc=com
+LDAP_SEARCH_FILTER=(uid={{username}})
 ```
 
 ## Como Usar
@@ -272,20 +289,39 @@ DELETE /api/usuarios/:id           # Remove usuário
 
 ## Sistema de Autenticação
 
-A API utiliza autenticação baseada em JWT (JSON Web Tokens):
+A API utiliza autenticação baseada em LDAP e JWT (JSON Web Tokens):
 
-- **Token de Acesso**: Válido por 1 hora (configurável)
-- **Refresh Token**: Válido por 7 dias (configurável)
-- **Estratégia**: Passport-JWT para validação de tokens
+- **LDAP**: Autenticação inicial via servidor LDAP
+- **Token de Acesso**: Válido por 7 dias (configurável)
+- **Estratégia**: Passport-LDAPAUTH para login e Passport-JWT para validação de tokens
 - **Headers**: Requer `Authorization: Bearer <token>` nas rotas protegidas
 
 ### Fluxo de Autenticação
 
-1. Cliente envia credenciais para `/api/auth/login`
-2. Servidor valida e retorna access token e refresh token
-3. Cliente inclui access token no header de requisições subsequentes
-4. Quando o access token expira, cliente usa refresh token em `/api/auth/refresh`
-5. Servidor valida refresh token e retorna novo access token
+1. Cliente envia credenciais (userId e senha) para `/api/auth/login`
+2. Servidor autentica via LDAP usando passport-ldapauth
+3. Se autenticado, servidor busca usuário no banco de dados local (o userId deve existir)
+4. Servidor gera e retorna JWT token
+5. Cliente inclui token no header de requisições subsequentes
+6. Quando o token expira, cliente usa refresh token em `/api/auth/refresh`
+7. Servidor valida refresh token e retorna novo token
+
+### Configuração LDAP
+
+O sistema requer as seguintes variáveis de ambiente para o LDAP:
+
+- `LDAP_ENABLED`: Habilita/desabilita autenticação LDAP (true/false, padrão: true)
+  - Se `false`, permite login sem senha (apenas para desenvolvimento)
+  - Se `true`, requer autenticação via LDAP
+- `LDAP_URL`: URL do servidor LDAP (ex: ldap://ldap.example.com:389)
+- `LDAP_BIND_DN`: DN do usuário administrativo para bind
+- `LDAP_BIND_CREDENTIALS`: Senha do usuário de bind
+- `LDAP_SEARCH_BASE`: Base DN para busca de usuários
+- `LDAP_SEARCH_FILTER`: Filtro de busca (use {{username}} como placeholder)
+
+O usuário deve existir previamente no banco de dados com o mesmo ID usado no LDAP.
+
+**Modo Desenvolvimento**: Para desabilitar LDAP localmente, defina `LDAP_ENABLED=false` no `.env`. Isso permite login apenas com userId, sem senha.
 
 ## Sistema de Permissões
 

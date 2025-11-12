@@ -59,7 +59,34 @@ const criaOferta = async (req, res) => {
 			});
 		}
 
-		// Verificar se já existe
+		// Verificar se existe uma oferta deletada com os mesmos dados
+		const ofertaDeletada =
+			await ofertasRepository.verificarExistenciaComDeletadas(
+				anoInt,
+				semestreInt,
+				idCursoInt,
+				faseInt,
+				turno,
+			);
+
+		// Se existe uma oferta deletada, restaurá-la
+		if (ofertaDeletada && ofertaDeletada.deletedAt) {
+			const ofertaRestaurada = await ofertasRepository.restaurarOferta(
+				anoInt,
+				semestreInt,
+				idCursoInt,
+				faseInt,
+				turno,
+			);
+
+			return res.status(200).json({
+				message: "Oferta reativada com sucesso",
+				oferta: ofertaRestaurada,
+				reativada: true,
+			});
+		}
+
+		// Verificar se já existe uma oferta ativa
 		const existente = await ofertasRepository.verificarExistencia(
 			anoInt,
 			semestreInt,

@@ -67,7 +67,7 @@ ofertasRepository.obterOfertaPorChaveComTurno = async (
 	return oferta;
 };
 
-// Verificar se oferta existe
+// Verificar se oferta existe (apenas ativas)
 ofertasRepository.verificarExistencia = async (
 	ano,
 	semestre,
@@ -85,6 +85,57 @@ ofertasRepository.verificarExistencia = async (
 		},
 	});
 	return existente;
+};
+
+// Verificar se oferta existe incluindo as deletadas
+ofertasRepository.verificarExistenciaComDeletadas = async (
+	ano,
+	semestre,
+	id_curso,
+	fase,
+	turno,
+) => {
+	const existente = await model.Oferta.findOne({
+		where: {
+			ano: parseInt(ano),
+			semestre: parseInt(semestre),
+			id_curso: parseInt(id_curso),
+			fase: parseInt(fase),
+			turno: turno,
+		},
+		paranoid: false, // Inclui registros deletados
+	});
+	return existente;
+};
+
+// Restaurar oferta deletada
+ofertasRepository.restaurarOferta = async (
+	ano,
+	semestre,
+	id_curso,
+	fase,
+	turno,
+) => {
+	const oferta = await model.Oferta.findOne({
+		where: {
+			ano: parseInt(ano),
+			semestre: parseInt(semestre),
+			id_curso: parseInt(id_curso),
+			fase: parseInt(fase),
+			turno: turno,
+		},
+		paranoid: false, // Inclui registros deletados
+	});
+
+	if (oferta && oferta.deletedAt) {
+		// Restaurar usando o método do Sequelize
+		await oferta.restore();
+		// Recarregar para pegar os dados atualizados
+		await oferta.reload();
+		return oferta;
+	}
+
+	return null;
 };
 
 // Criar nova oferta

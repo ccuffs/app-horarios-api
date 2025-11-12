@@ -196,22 +196,23 @@ const atualizaOferta = async (req, res) => {
 // Função para deletar oferta
 const deletaOferta = async (req, res) => {
 	try {
-		const { ano, semestre, id_curso, fase } = req.params;
+		const { ano, semestre, id_curso, fase, turno } = req.params;
 
 		const sucesso = await ofertasRepository.deletarOferta(
 			ano,
 			semestre,
 			id_curso,
 			fase,
+			turno,
 		);
 
 		if (sucesso) {
 			res.status(200).json({
-				message: `Oferta removida com sucesso para ano=${ano}, semestre=${semestre}, curso=${id_curso}, fase=${fase}`,
+				message: `Oferta removida com sucesso para ano=${ano}, semestre=${semestre}, curso=${id_curso}, fase=${fase}, turno=${turno}`,
 			});
 		} else {
 			res.status(404).json({
-				message: `Oferta não encontrada para ano=${ano}, semestre=${semestre}, curso=${id_curso}, fase=${fase}`,
+				message: `Oferta não encontrada para ano=${ano}, semestre=${semestre}, curso=${id_curso}, fase=${fase}, turno=${turno}`,
 			});
 		}
 	} catch (error) {

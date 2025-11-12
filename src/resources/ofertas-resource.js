@@ -35,7 +35,7 @@ ofertasResource.put(
 
 // DELETE - Remover oferta
 ofertasResource.delete(
-	"/:ano/:semestre/:id_curso/:fase",
+	"/:ano/:semestre/:id_curso/:fase/:turno",
 	auth.autenticarUsuario,
 	autorizacao.verificarPermissao(Permissoes.OFERTAS_CURSO.DELETAR),
 	ofertasService.deletaOferta,

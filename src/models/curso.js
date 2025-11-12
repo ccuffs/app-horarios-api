@@ -17,24 +17,19 @@ module.exports = (sequelize, DataTypes) => {
 				type: DataTypes.DATE,
 				defaultValue: DataTypes.NOW,
 			},
-			updatedAt: {
-				allowNull: false,
-				type: DataTypes.DATE,
-				defaultValue: DataTypes.NOW,
-			},
-			deletedAt: {
-				allowNull: true,
-				type: DataTypes.DATE,
-			},
+		updatedAt: {
+			allowNull: false,
+			type: DataTypes.DATE,
+			defaultValue: DataTypes.NOW,
 		},
+	},
 		{
-			sequelize,
-			tableName: "curso",
-			schema: "public",
-			freezeTableName: true,
-			timestamps: true,
-			paranoid: true,
-		},
+		sequelize,
+		tableName: "curso",
+		schema: "public",
+		freezeTableName: true,
+		timestamps: true,
+	},
 	);
 
 	Curso.associate = function (models) {

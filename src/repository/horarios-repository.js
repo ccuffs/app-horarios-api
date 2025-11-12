@@ -148,4 +148,22 @@ horariosRepository.deletarHorariosPorIds = async (
 	return deleted;
 };
 
+// Verificar se existem horários vinculados a uma oferta específica
+horariosRepository.verificarHorariosVinculados = async (
+	ano,
+	semestre,
+	id_curso,
+	fase,
+) => {
+	const count = await model.Horario.count({
+		where: {
+			ano: parseInt(ano),
+			semestre: parseInt(semestre),
+			id_curso: parseInt(id_curso),
+			fase: parseInt(fase),
+		},
+	});
+	return count > 0;
+};
+
 module.exports = horariosRepository;

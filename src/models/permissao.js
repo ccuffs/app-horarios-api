@@ -27,24 +27,19 @@ module.exports = (sequelize, DataTypes) => {
 				type: DataTypes.DATE,
 				defaultValue: DataTypes.NOW,
 			},
-			updatedAt: {
-				allowNull: false,
-				type: DataTypes.DATE,
-				defaultValue: DataTypes.NOW,
-			},
-			deletedAt: {
-				allowNull: true,
-				type: DataTypes.DATE,
-			},
+		updatedAt: {
+			allowNull: false,
+			type: DataTypes.DATE,
+			defaultValue: DataTypes.NOW,
 		},
+	},
 		{
-			sequelize,
-			tableName: "permissao",
-			schema: "public",
-			freezeTableName: true,
-			timestamps: true,
-			paranoid: true,
-		},
+		sequelize,
+		tableName: "permissao",
+		schema: "public",
+		freezeTableName: true,
+		timestamps: true,
+	},
 	);
 
 	Permissao.associate = function (models) {

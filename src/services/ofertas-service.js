@@ -1,4 +1,5 @@
 const ofertasRepository = require("../repository/ofertas-repository");
+const horariosRepository = require("../repository/horarios-repository");
 
 // Função para retornar ofertas
 const retornaOfertas = async (req, res) => {
@@ -59,34 +60,7 @@ const criaOferta = async (req, res) => {
 			});
 		}
 
-		// Verificar se existe uma oferta deletada com os mesmos dados
-		const ofertaDeletada =
-			await ofertasRepository.verificarExistenciaComDeletadas(
-				anoInt,
-				semestreInt,
-				idCursoInt,
-				faseInt,
-				turno,
-			);
-
-		// Se existe uma oferta deletada, restaurá-la
-		if (ofertaDeletada && ofertaDeletada.deletedAt) {
-			const ofertaRestaurada = await ofertasRepository.restaurarOferta(
-				anoInt,
-				semestreInt,
-				idCursoInt,
-				faseInt,
-				turno,
-			);
-
-			return res.status(200).json({
-				message: "Oferta reativada com sucesso",
-				oferta: ofertaRestaurada,
-				reativada: true,
-			});
-		}
-
-		// Verificar se já existe uma oferta ativa
+		// Verificar se já existe
 		const existente = await ofertasRepository.verificarExistencia(
 			anoInt,
 			semestreInt,
@@ -224,6 +198,20 @@ const atualizaOferta = async (req, res) => {
 const deletaOferta = async (req, res) => {
 	try {
 		const { ano, semestre, id_curso, fase, turno } = req.params;
+
+		// Verificar se existem horários vinculados a esta oferta
+		const possuiHorarios = await horariosRepository.verificarHorariosVinculados(
+			ano,
+			semestre,
+			id_curso,
+			fase,
+		);
+
+		if (possuiHorarios) {
+			return res.status(400).json({
+				message: `Não é possível remover esta oferta pois existem horários vinculados a ela. Remova os horários antes de deletar a oferta.`,
+			});
+		}
 
 		const sucesso = await ofertasRepository.deletarOferta(
 			ano,

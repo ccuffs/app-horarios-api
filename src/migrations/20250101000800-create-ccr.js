@@ -26,27 +26,23 @@ module.exports = {
 				type: Sequelize.STRING,
 				allowNull: true,
 			},
-		creditos: {
-			type: Sequelize.INTEGER,
-			allowNull: false,
-			defaultValue: 4,
-		},
-		createdAt: {
-			allowNull: false,
-			type: Sequelize.DATE,
-			defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
-		},
-		updatedAt: {
-			allowNull: false,
-			type: Sequelize.DATE,
-			defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
-		},
-		deletedAt: {
-			allowNull: true,
-			type: Sequelize.DATE,
-		},
-	};
-},
+			creditos: {
+				type: Sequelize.INTEGER,
+				allowNull: false,
+				defaultValue: 4,
+			},
+			createdAt: {
+				allowNull: false,
+				type: Sequelize.DATE,
+				defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
+			},
+			updatedAt: {
+				allowNull: false,
+				type: Sequelize.DATE,
+				defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
+			},
+		};
+	},
 
 	async up(queryInterface, Sequelize) {
 		await queryInterface.createTable(
@@ -72,4 +68,3 @@ module.exports = {
 		await queryInterface.dropTable(this.table);
 	},
 };
-

@@ -16,26 +16,22 @@ module.exports = {
 				type: Sequelize.STRING,
 				allowNull: true,
 			},
-		email: {
-			type: Sequelize.STRING,
-			allowNull: true,
-		},
-		createdAt: {
-			allowNull: false,
-			type: Sequelize.DATE,
-			defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
-		},
-		updatedAt: {
-			allowNull: false,
-			type: Sequelize.DATE,
-			defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
-		},
-		deletedAt: {
-			allowNull: true,
-			type: Sequelize.DATE,
-		},
-	};
-},
+			email: {
+				type: Sequelize.STRING,
+				allowNull: true,
+			},
+			createdAt: {
+				allowNull: false,
+				type: Sequelize.DATE,
+				defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
+			},
+			updatedAt: {
+				allowNull: false,
+				type: Sequelize.DATE,
+				defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
+			},
+		};
+	},
 
 	async up(queryInterface, Sequelize) {
 		await queryInterface.createTable(
@@ -77,4 +73,3 @@ module.exports = {
 		`);
 	},
 };
-

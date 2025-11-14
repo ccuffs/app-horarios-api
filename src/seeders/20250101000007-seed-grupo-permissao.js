@@ -11,7 +11,6 @@ module.exports = {
 				id_permissao: i,
 				createdAt: new Date("2025-10-18T20:00:31.256Z"),
 				updatedAt: new Date("2025-10-18T20:00:31.256Z"),
-				deletedAt: null,
 			});
 		}
 
@@ -22,7 +21,6 @@ module.exports = {
 				id_permissao: i,
 				createdAt: new Date("2025-10-18T20:00:31.256Z"),
 				updatedAt: new Date("2025-10-18T20:00:31.256Z"),
-				deletedAt: null,
 			});
 		}
 
@@ -33,7 +31,6 @@ module.exports = {
 				id_permissao,
 				createdAt: new Date("2025-10-18T20:00:31.256Z"),
 				updatedAt: new Date("2025-10-18T20:00:31.256Z"),
-				deletedAt: null,
 			});
 		});
 
@@ -44,4 +41,3 @@ module.exports = {
 		await queryInterface.bulkDelete("grupo_permissao", null, {});
 	},
 };
-

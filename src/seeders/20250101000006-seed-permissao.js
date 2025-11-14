@@ -12,7 +12,6 @@ module.exports = {
 					codigo_categoria_permissao: "CURSO",
 					createdAt: new Date("2025-10-18T20:00:31.247Z"),
 					updatedAt: new Date("2025-10-18T20:00:31.247Z"),
-					deletedAt: null,
 				},
 				{
 					id: 2,
@@ -21,7 +20,6 @@ module.exports = {
 					codigo_categoria_permissao: "CURSO",
 					createdAt: new Date("2025-10-18T20:00:31.247Z"),
 					updatedAt: new Date("2025-10-18T20:00:31.247Z"),
-					deletedAt: null,
 				},
 				{
 					id: 3,
@@ -30,7 +28,6 @@ module.exports = {
 					codigo_categoria_permissao: "CURSO",
 					createdAt: new Date("2025-10-18T20:00:31.247Z"),
 					updatedAt: new Date("2025-10-18T20:00:31.247Z"),
-					deletedAt: null,
 				},
 				{
 					id: 4,
@@ -39,7 +36,6 @@ module.exports = {
 					codigo_categoria_permissao: "CURSO",
 					createdAt: new Date("2025-10-18T20:00:31.247Z"),
 					updatedAt: new Date("2025-10-18T20:00:31.247Z"),
-					deletedAt: null,
 				},
 				{
 					id: 5,
@@ -48,7 +44,6 @@ module.exports = {
 					codigo_categoria_permissao: "CURSO",
 					createdAt: new Date("2025-10-18T20:00:31.247Z"),
 					updatedAt: new Date("2025-10-18T20:00:31.247Z"),
-					deletedAt: null,
 				},
 				{
 					id: 6,
@@ -57,7 +52,6 @@ module.exports = {
 					codigo_categoria_permissao: "HORARIOS",
 					createdAt: new Date("2025-10-18T20:00:31.247Z"),
 					updatedAt: new Date("2025-10-18T20:00:31.247Z"),
-					deletedAt: null,
 				},
 				{
 					id: 7,
@@ -66,7 +60,6 @@ module.exports = {
 					codigo_categoria_permissao: "HORARIOS",
 					createdAt: new Date("2025-10-18T20:00:31.247Z"),
 					updatedAt: new Date("2025-10-18T20:00:31.247Z"),
-					deletedAt: null,
 				},
 				{
 					id: 8,
@@ -75,7 +68,6 @@ module.exports = {
 					codigo_categoria_permissao: "HORARIOS",
 					createdAt: new Date("2025-10-18T20:00:31.247Z"),
 					updatedAt: new Date("2025-10-18T20:00:31.247Z"),
-					deletedAt: null,
 				},
 				{
 					id: 9,
@@ -84,7 +76,6 @@ module.exports = {
 					codigo_categoria_permissao: "HORARIOS",
 					createdAt: new Date("2025-10-18T20:00:31.247Z"),
 					updatedAt: new Date("2025-10-18T20:00:31.247Z"),
-					deletedAt: null,
 				},
 				{
 					id: 10,
@@ -93,7 +84,6 @@ module.exports = {
 					codigo_categoria_permissao: "HORARIOS",
 					createdAt: new Date("2025-10-18T20:00:31.247Z"),
 					updatedAt: new Date("2025-10-18T20:00:31.247Z"),
-					deletedAt: null,
 				},
 				{
 					id: 11,
@@ -102,7 +92,6 @@ module.exports = {
 					codigo_categoria_permissao: "DOCENTES",
 					createdAt: new Date("2025-10-18T20:00:31.247Z"),
 					updatedAt: new Date("2025-10-18T20:00:31.247Z"),
-					deletedAt: null,
 				},
 				{
 					id: 12,
@@ -111,7 +100,6 @@ module.exports = {
 					codigo_categoria_permissao: "DOCENTES",
 					createdAt: new Date("2025-10-18T20:00:31.247Z"),
 					updatedAt: new Date("2025-10-18T20:00:31.247Z"),
-					deletedAt: null,
 				},
 				{
 					id: 13,
@@ -120,7 +108,6 @@ module.exports = {
 					codigo_categoria_permissao: "DOCENTES",
 					createdAt: new Date("2025-10-18T20:00:31.247Z"),
 					updatedAt: new Date("2025-10-18T20:00:31.247Z"),
-					deletedAt: null,
 				},
 				{
 					id: 14,
@@ -129,7 +116,6 @@ module.exports = {
 					codigo_categoria_permissao: "DOCENTES",
 					createdAt: new Date("2025-10-18T20:00:31.247Z"),
 					updatedAt: new Date("2025-10-18T20:00:31.247Z"),
-					deletedAt: null,
 				},
 				{
 					id: 15,
@@ -138,7 +124,6 @@ module.exports = {
 					codigo_categoria_permissao: "DOCENTES",
 					createdAt: new Date("2025-10-18T20:00:31.247Z"),
 					updatedAt: new Date("2025-10-18T20:00:31.247Z"),
-					deletedAt: null,
 				},
 				{
 					id: 16,
@@ -147,7 +132,6 @@ module.exports = {
 					codigo_categoria_permissao: "OFERTAS-CURSO",
 					createdAt: new Date("2025-10-18T20:00:31.247Z"),
 					updatedAt: new Date("2025-10-18T20:00:31.247Z"),
-					deletedAt: null,
 				},
 				{
 					id: 17,
@@ -156,7 +140,6 @@ module.exports = {
 					codigo_categoria_permissao: "OFERTAS-CURSO",
 					createdAt: new Date("2025-10-18T20:00:31.247Z"),
 					updatedAt: new Date("2025-10-18T20:00:31.247Z"),
-					deletedAt: null,
 				},
 				{
 					id: 18,
@@ -165,7 +148,6 @@ module.exports = {
 					codigo_categoria_permissao: "OFERTAS-CURSO",
 					createdAt: new Date("2025-10-18T20:00:31.247Z"),
 					updatedAt: new Date("2025-10-18T20:00:31.247Z"),
-					deletedAt: null,
 				},
 				{
 					id: 19,
@@ -174,7 +156,6 @@ module.exports = {
 					codigo_categoria_permissao: "OFERTAS-CURSO",
 					createdAt: new Date("2025-10-18T20:00:31.247Z"),
 					updatedAt: new Date("2025-10-18T20:00:31.247Z"),
-					deletedAt: null,
 				},
 				{
 					id: 20,
@@ -183,7 +164,6 @@ module.exports = {
 					codigo_categoria_permissao: "OFERTAS-CURSO",
 					createdAt: new Date("2025-10-18T20:00:31.247Z"),
 					updatedAt: new Date("2025-10-18T20:00:31.247Z"),
-					deletedAt: null,
 				},
 				{
 					id: 21,
@@ -192,7 +172,6 @@ module.exports = {
 					codigo_categoria_permissao: "CCR",
 					createdAt: new Date("2025-10-18T20:00:31.247Z"),
 					updatedAt: new Date("2025-10-18T20:00:31.247Z"),
-					deletedAt: null,
 				},
 				{
 					id: 22,
@@ -201,7 +180,6 @@ module.exports = {
 					codigo_categoria_permissao: "CCR",
 					createdAt: new Date("2025-10-18T20:00:31.247Z"),
 					updatedAt: new Date("2025-10-18T20:00:31.247Z"),
-					deletedAt: null,
 				},
 				{
 					id: 23,
@@ -210,7 +188,6 @@ module.exports = {
 					codigo_categoria_permissao: "CCR",
 					createdAt: new Date("2025-10-18T20:00:31.247Z"),
 					updatedAt: new Date("2025-10-18T20:00:31.247Z"),
-					deletedAt: null,
 				},
 				{
 					id: 24,
@@ -219,7 +196,6 @@ module.exports = {
 					codigo_categoria_permissao: "CCR",
 					createdAt: new Date("2025-10-18T20:00:31.247Z"),
 					updatedAt: new Date("2025-10-18T20:00:31.247Z"),
-					deletedAt: null,
 				},
 				{
 					id: 25,
@@ -228,10 +204,9 @@ module.exports = {
 					codigo_categoria_permissao: "CCR",
 					createdAt: new Date("2025-10-18T20:00:31.247Z"),
 					updatedAt: new Date("2025-10-18T20:00:31.247Z"),
-					deletedAt: null,
 				},
 			],
-			{}
+			{},
 		);
 	},
 
@@ -239,4 +214,3 @@ module.exports = {
 		await queryInterface.bulkDelete("permissao", null, {});
 	},
 };
-

@@ -13,10 +13,9 @@ module.exports = {
 					coordenador: "claunir.pavan",
 					createdAt: new Date("2025-10-18T19:12:59.235Z"),
 					updatedAt: new Date("2025-10-18T19:12:59.235Z"),
-					deletedAt: null,
 				},
 			],
-			{}
+			{},
 		);
 	},
 
@@ -24,4 +23,3 @@ module.exports = {
 		await queryInterface.bulkDelete("curso", null, {});
 	},
 };
-

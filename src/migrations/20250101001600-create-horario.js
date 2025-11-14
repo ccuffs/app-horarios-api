@@ -85,26 +85,22 @@ module.exports = {
 				type: Sequelize.STRING,
 				allowNull: false,
 			},
-		permitirconflito: {
-			type: Sequelize.BOOLEAN,
-			allowNull: true,
-		},
-		createdAt: {
-			allowNull: false,
-			type: Sequelize.DATE,
-			defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
-		},
-		updatedAt: {
-			allowNull: false,
-			type: Sequelize.DATE,
-			defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
-		},
-		deletedAt: {
-			allowNull: true,
-			type: Sequelize.DATE,
-		},
-	};
-},
+			permitirconflito: {
+				type: Sequelize.BOOLEAN,
+				allowNull: true,
+			},
+			createdAt: {
+				allowNull: false,
+				type: Sequelize.DATE,
+				defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
+			},
+			updatedAt: {
+				allowNull: false,
+				type: Sequelize.DATE,
+				defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
+			},
+		};
+	},
 
 	async up(queryInterface, Sequelize) {
 		await queryInterface.createTable(
@@ -140,4 +136,3 @@ module.exports = {
 		await queryInterface.dropTable(this.table);
 	},
 };
-

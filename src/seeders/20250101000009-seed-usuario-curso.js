@@ -23,7 +23,6 @@ module.exports = {
 			id_usuario,
 			createdAt: new Date("2025-10-18T19:12:59.281Z"),
 			updatedAt: new Date("2025-10-18T19:12:59.281Z"),
-			deletedAt: null,
 		}));
 
 		await queryInterface.bulkInsert("usuario_curso", usuarioCursos, {});
@@ -33,4 +32,3 @@ module.exports = {
 		await queryInterface.bulkDelete("usuario_curso", null, {});
 	},
 };
-

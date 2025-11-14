@@ -12,7 +12,6 @@ module.exports = {
 					sistema: true,
 					createdAt: new Date("2025-10-18T20:00:31.238Z"),
 					updatedAt: new Date("2025-10-18T20:00:31.238Z"),
-					deletedAt: null,
 				},
 				{
 					id: 2,
@@ -21,7 +20,6 @@ module.exports = {
 					sistema: true,
 					createdAt: new Date("2025-10-18T20:00:31.238Z"),
 					updatedAt: new Date("2025-10-18T20:00:31.238Z"),
-					deletedAt: null,
 				},
 				{
 					id: 3,
@@ -30,10 +28,9 @@ module.exports = {
 					sistema: true,
 					createdAt: new Date("2025-10-18T20:00:31.238Z"),
 					updatedAt: new Date("2025-10-18T20:00:31.238Z"),
-					deletedAt: null,
 				},
 			],
-			{}
+			{},
 		);
 	},
 
@@ -41,4 +38,3 @@ module.exports = {
 		await queryInterface.bulkDelete("grupo", null, {});
 	},
 };
-

@@ -11,7 +11,6 @@ module.exports = {
 					email: "gian@uffs.edu.br",
 					createdAt: new Date("2025-10-18T19:12:59.196Z"),
 					updatedAt: new Date("2025-10-18T19:12:59.196Z"),
-					deletedAt: null,
 				},
 				{
 					id: "claunir.pavan",
@@ -19,7 +18,6 @@ module.exports = {
 					email: "claunir.pavan@uffs.edu.br",
 					createdAt: new Date("2025-10-18T19:12:59.196Z"),
 					updatedAt: new Date("2025-10-18T19:12:59.196Z"),
-					deletedAt: null,
 				},
 				{
 					id: "lcaimi",
@@ -27,7 +25,6 @@ module.exports = {
 					email: "lcaimi@uffs.edu.br",
 					createdAt: new Date("2025-10-18T19:12:59.196Z"),
 					updatedAt: new Date("2025-10-18T19:12:59.196Z"),
-					deletedAt: null,
 				},
 				{
 					id: "andrei.braga",
@@ -35,7 +32,6 @@ module.exports = {
 					email: "andrei.braga@uffs.edu.br",
 					createdAt: new Date("2025-10-18T19:12:59.196Z"),
 					updatedAt: new Date("2025-10-18T19:12:59.196Z"),
-					deletedAt: null,
 				},
 				{
 					id: "felipe.grando",
@@ -43,7 +39,6 @@ module.exports = {
 					email: "grando@uffs.edu.br",
 					createdAt: new Date("2025-10-18T19:12:59.196Z"),
 					updatedAt: new Date("2025-10-18T19:12:59.196Z"),
-					deletedAt: null,
 				},
 				{
 					id: "samuel.feitosa",
@@ -51,7 +46,6 @@ module.exports = {
 					email: "samuelfeitosa@uffs.edu.br",
 					createdAt: new Date("2025-10-18T19:12:59.196Z"),
 					updatedAt: new Date("2025-10-18T19:12:59.196Z"),
-					deletedAt: null,
 				},
 				{
 					id: "braulio",
@@ -59,7 +53,6 @@ module.exports = {
 					email: "braulio@uffs.edu.br",
 					createdAt: new Date("2025-10-18T19:12:59.196Z"),
 					updatedAt: new Date("2025-10-18T19:12:59.196Z"),
-					deletedAt: null,
 				},
 				{
 					id: "duarte",
@@ -67,7 +60,6 @@ module.exports = {
 					email: "duarte@uffs.edu.br",
 					createdAt: new Date("2025-10-18T19:12:59.196Z"),
 					updatedAt: new Date("2025-10-18T19:12:59.196Z"),
-					deletedAt: null,
 				},
 				{
 					id: "guilherme.dalbianco",
@@ -75,7 +67,6 @@ module.exports = {
 					email: "guilherme.dalbianco@uffs.edu.br",
 					createdAt: new Date("2025-10-18T19:12:59.196Z"),
 					updatedAt: new Date("2025-10-18T19:12:59.196Z"),
-					deletedAt: null,
 				},
 				{
 					id: "marco.spohn",
@@ -83,7 +74,6 @@ module.exports = {
 					email: "marco.spohn@uffs.edu.br",
 					createdAt: new Date("2025-10-18T19:12:59.196Z"),
 					updatedAt: new Date("2025-10-18T19:12:59.196Z"),
-					deletedAt: null,
 				},
 				{
 					id: "raquel.pegoraro",
@@ -91,7 +81,6 @@ module.exports = {
 					email: "raquel.pegoraro@uffs.edu.br",
 					createdAt: new Date("2025-10-18T19:12:59.196Z"),
 					updatedAt: new Date("2025-10-18T19:12:59.196Z"),
-					deletedAt: null,
 				},
 				{
 					id: "schreiner.geomar",
@@ -99,7 +88,6 @@ module.exports = {
 					email: "schreiner.geomar@uffs.edu.br",
 					createdAt: new Date("2025-10-18T19:12:59.196Z"),
 					updatedAt: new Date("2025-10-18T19:12:59.196Z"),
-					deletedAt: null,
 				},
 				{
 					id: "ricardo.parizotto",
@@ -107,10 +95,9 @@ module.exports = {
 					email: "ricardo.parizotto@uffs.edu.br",
 					createdAt: new Date("2025-10-18T19:12:59.196Z"),
 					updatedAt: new Date("2025-10-18T19:12:59.196Z"),
-					deletedAt: null,
 				},
 			],
-			{}
+			{},
 		);
 	},
 
@@ -118,4 +105,3 @@ module.exports = {
 		await queryInterface.bulkDelete("usuario", null, {});
 	},
 };
-

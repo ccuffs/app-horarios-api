@@ -27,19 +27,19 @@ module.exports = (sequelize, DataTypes) => {
 				type: DataTypes.DATE,
 				defaultValue: DataTypes.NOW,
 			},
-		updatedAt: {
-			allowNull: false,
-			type: DataTypes.DATE,
-			defaultValue: DataTypes.NOW,
+			updatedAt: {
+				allowNull: false,
+				type: DataTypes.DATE,
+				defaultValue: DataTypes.NOW,
+			},
 		},
-	},
 		{
-		sequelize,
-		tableName: "usuario_curso",
-		schema: "public",
-		freezeTableName: true,
-		timestamps: true,
-	},
+			sequelize,
+			tableName: "usuario_curso",
+			schema: "public",
+			freezeTableName: true,
+			timestamps: true,
+		},
 	);
 
 	UsuarioCurso.associate = function (models) {

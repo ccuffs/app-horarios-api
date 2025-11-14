@@ -200,12 +200,13 @@ const deletaOferta = async (req, res) => {
 		const { ano, semestre, id_curso, fase, turno } = req.params;
 
 		// Verificar se existem horários vinculados a esta oferta
-		const possuiHorarios = await horariosRepository.verificarHorariosVinculados(
-			ano,
-			semestre,
-			id_curso,
-			fase,
-		);
+		const possuiHorarios =
+			await horariosRepository.verificarHorariosVinculados(
+				ano,
+				semestre,
+				id_curso,
+				fase,
+			);
 
 		if (possuiHorarios) {
 			return res.status(400).json({

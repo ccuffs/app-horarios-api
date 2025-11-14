@@ -46,17 +46,21 @@ const autenticarLdap = (userId, senha) => {
 			},
 		};
 
-		passport.authenticate("ldapauth", { session: false }, (err, user, info) => {
-			if (err) {
-				return reject(err);
-			}
+		passport.authenticate(
+			"ldapauth",
+			{ session: false },
+			(err, user, info) => {
+				if (err) {
+					return reject(err);
+				}
 
-			if (!user) {
-				return reject(new Error("Credenciais inválidas"));
-			}
+				if (!user) {
+					return reject(new Error("Credenciais inválidas"));
+				}
 
-			resolve(user);
-		})(req);
+				resolve(user);
+			},
+		)(req);
 	});
 };
 
@@ -75,7 +79,9 @@ const fazerLogin = async (userId, senha = null) => {
 			const dadosLdap = await autenticarLdap(userId, senha);
 
 			// Buscar usuário no banco de dados pelo ID retornado do LDAP
-			const usuario = await authRepository.buscarUsuarioPorId(dadosLdap.id);
+			const usuario = await authRepository.buscarUsuarioPorId(
+				dadosLdap.id,
+			);
 
 			if (!usuario) {
 				throw new Error("Usuário não encontrado");

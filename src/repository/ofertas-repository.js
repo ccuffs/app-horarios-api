@@ -113,7 +113,13 @@ ofertasRepository.atualizarOferta = async (
 };
 
 // Deletar oferta
-ofertasRepository.deletarOferta = async (ano, semestre, id_curso, fase, turno) => {
+ofertasRepository.deletarOferta = async (
+	ano,
+	semestre,
+	id_curso,
+	fase,
+	turno,
+) => {
 	const deleted = await model.Oferta.destroy({
 		where: {
 			ano: parseInt(ano),
